@@ -1,1 +1,1 @@
-web: gunicorn asde-app.wsgi
+web: gunicorn asde_project.wsgi
