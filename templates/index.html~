@@ -5,8 +5,8 @@
     <title>My Google OAuth Project</title>
 </head>
 <body>
-{% if user.is_authenticated %}
     <h1>Welcome, {{ user_name }}!</h1>
+{% if user.is_authenticated %}
     {% if is_site_admin %}	
   	<p>You are logged in as a site admin</p>
     {% else %}

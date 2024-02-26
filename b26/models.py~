@@ -12,9 +12,6 @@ from django.dispatch import receiver
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     is_site_admin = models.BooleanField(default=False)
-    
-    class Meta:
-        verbose_name_plural = "User Profiles"
 
     def __str__(self):
         return self.user.username
