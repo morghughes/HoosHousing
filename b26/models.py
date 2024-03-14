@@ -28,6 +28,7 @@ def save_user_profile(sender, instance, **kwargs):
 # resources:
 # https://docs.djangoproject.com/en/3.2/topics/db/models/
 # https://docs.djangoproject.com/en/3.2/topics/http/file-uploads/
+# https://docs.djangoproject.com/en/5.0/intro/tutorial02/
 
 class FileUpload(models.Model):
     uploader = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='file_uploads', on_delete=models.CASCADE, null=True, blank=True)
