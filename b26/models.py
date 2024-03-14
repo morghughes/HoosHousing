@@ -38,5 +38,5 @@ class FileUpload(models.Model):
 
 @receiver(post_save, sender=get_user_model())
 def ensure_user_profile_exists(sender, instance, created, **kwargs):
-    UserProfile.objects.get_or_create(user=instance)  # Get_or_create to avoid duplication
+    UserProfile.objects.get_or_create(user=instance)
     instance.userprofile.save()
