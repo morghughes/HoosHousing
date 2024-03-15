@@ -23,7 +23,7 @@ from b26 import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-	path('', views.index, name='home'),
+    path('', views.index, name='home'),
     path('accounts/', include('allauth.urls')),
     path('logout', LogoutView.as_view()),
     path('upload/', views.upload_file, name='upload'),
