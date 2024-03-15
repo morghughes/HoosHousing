@@ -25,7 +25,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 	path('', views.index, name='home'),
     path('accounts/', include('allauth.urls')),
-    path('logout', LogoutView.as_view()),
+    path('logout/', LogoutView.as_view(), name='logout'),
     path('upload/', views.upload_file, name='upload'),
     path('admin/files/', views.admin_files, name='admin_files'),
 

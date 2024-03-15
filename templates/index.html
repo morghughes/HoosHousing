@@ -1,5 +1,6 @@
 {% load socialaccount %}
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>My Google OAuth Project</title>
@@ -7,18 +8,22 @@
 <body>
 {% if user.is_authenticated %}
     <h1>Welcome, {{ user_name }}!</h1>
-    {% if is_site_admin %}	
-  	<p>You are logged in as a site admin</p>
+    {% if is_site_admin %}    
+        <p>You are logged in as a site admin.</p>
     {% else %}
-    	<p>You are logged in as a normal user.</p>
+        <p>You are logged in as a normal user.</p>
     {% endif %}
+    
+    <p><a href="{% url 'logout' %}">Logout</a></p>
+
+    <form action="{% url 'upload' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="file" accept=".txt, .pdf, image/jpeg">
+        <button type="submit">Upload File</button>
+    </form>
+
 {% else %}
-  <a href="{% provider_login_url 'google' %}">Login With Google</a>
-  <form action="{% url 'upload' %}" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <input type="file" name="file" accept=".txt, .pdf, image/jpeg">
-    <button type="submit">Upload File</button>
-</form>
+    <a href="{% provider_login_url 'google' %}">Login With Google</a>
 {% endif %}
 </body>
 </html>
