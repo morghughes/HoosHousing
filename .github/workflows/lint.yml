@@ -1,6 +1,6 @@
 # .github/workflows/lint.yml
 
-name: Lint Python
+name: Flake Linting
 
 on: [push, pull_request]
 
