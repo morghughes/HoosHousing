@@ -39,6 +39,7 @@ def upload_file(request):
         return JsonResponse({'file_url': file_url})
     else:
         return JsonResponse({'error': 'No file was given'}, status=400)
+    
 
 
 
