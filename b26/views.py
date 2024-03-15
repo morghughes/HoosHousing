@@ -32,9 +32,23 @@ def upload_file(request):
         file = request.FILES['file']
         file_name = default_storage.save(file.name, file)
         file_url = default_storage.url(file_name)
-
-        file_upload = FileUpload(data=file_name, uploader=request.user if request.user.is_authenticated else None)
+        
+        file_upload = FileUpload(data=file.name, uploader=request.user)
         file_upload.save()
-
+        
         return JsonResponse({'file_url': file_url})
-    return JsonResponse({'error': 'No file was given'}, status=400)
+    else:
+        return JsonResponse({'error': 'No file was given'}, status=400)
+    
+
+
+
+def admin_files(request):
+    # checks to see if user is an admin
+    if not request.user.is_staff:
+        return JsonResponse({'error': 'Unauthorized, please try again'}, status=403)
+
+    # List all files (for simplicity; add pagination and filtering as needed)
+    files = FileUpload.objects.all()
+    files_data = [{'name': file.file.name, 'url': file.file.url} for file in files]
+    return JsonResponse({'files': files_data})

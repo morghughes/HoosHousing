@@ -1,19 +1,56 @@
+{% load static %}
 {% load socialaccount %}
-<html>
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>My Google OAuth Project</title>
 </head>
 <body>
-{% if user.is_authenticated %}
-    <h1>Welcome, {{ user_name }}!</h1>
-    {% if is_site_admin %}	
-  	<p>You are logged in as a site admin</p>
+    {% if user.is_authenticated %}
+        <h1>Welcome, {{ request.user.username }}!</h1>
+        <p><a href="{% url 'logout' %}">Logout</a></p>
+        
+        <form id="file-upload-form" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="file" accept=".txt, .pdf, image/jpeg">
+            <button type="submit">Upload File</button>
+        </form>
+        <div id="messages"></div>
+
+        <script type="text/javascript">
+            document.getElementById('file-upload-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                var formData = new FormData(this);
+                fetch("{% url 'upload' %}", {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': formData.get('csrfmiddlewaretoken'),
+                    },
+                })
+                .then(response => {
+                    if(response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Server response wasnt OK');
+                    }
+                })
+                .then(data => {
+                    document.getElementById('messages').innerHTML = 
+                        '<p>File uploaded successfully! <a href="' + data.file_url + '" target="_blank">Click here to view your file</a>.</p>';
+                })
+                .catch(error => {
+                    document.getElementById('messages').innerHTML = 
+                        '<p>Error uploading file. Please try again.</p>';
+                    console.error('Error:', error);
+                });
+            });
+        </script>
+
     {% else %}
-    	<p>You are logged in as a normal user.</p>
+        <a href="{% provider_login_url 'google' %}">Login With Google</a>
     {% endif %}
-{% else %}
-  <a href="{% provider_login_url 'google' %}">Login With Google</a>
-{% endif %}
 </body>
 </html>
