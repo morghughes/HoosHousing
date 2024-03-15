@@ -1,0 +1,47 @@
+# .github/workflows/django_tests.yml
+
+name: Django Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:12
+        env:
+          POSTGRES_DB: myapp_test
+          POSTGRES_USER: myapp
+          POSTGRES_PASSWORD: myapp_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run tests
+      env:
+        DATABASE_URL: postgres://khrxkvifsfrged:dc481d44ac2945667e21c81095b5b8649ce4f2e2254acd704fa8981e1a62fdc8@ec2-3-234-126-10.compute-1.amazonaws.com:5432/d3ksble7vsksl3
+      run: |
+        python manage.py test
