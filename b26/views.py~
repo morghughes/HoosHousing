@@ -1,0 +1,23 @@
+from django.shortcuts import render
+
+from djang.contrib.auth.decorators import login_required
+from .models import UserProfile
+
+# Create your views here.
+@login_required
+def index(request):
+    try:
+        user_profile = UserProfile.objects.get(user=request.user)
+        context = {
+            'user_name': request.user.username,
+            'is_site_admin': user_profile.is_site_admin,
+        }
+    except UserProfile.DoesNotExist:
+        # Handle case where user profile does not exist, if necessary
+        context = {
+            'user_name': request.user.username,
+            'is_site_admin': False,
+        }
+
+    return render(request, 'index.html', context)
+
