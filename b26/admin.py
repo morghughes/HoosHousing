@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import UserProfile, FileUpload
 
+
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ['user', 'is_site_admin']
@@ -9,6 +10,7 @@ class UserProfileAdmin(admin.ModelAdmin):
 
 # resources:
 # https://docs.djangoproject.com/en/3.2/ref/contrib/admin/
+
 
 @admin.register(FileUpload)
 class FileUploadAdmin(admin.ModelAdmin):
