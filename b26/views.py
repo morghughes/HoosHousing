@@ -38,3 +38,13 @@ def upload_file(request):
 
         return JsonResponse({'file_url': file_url})
     return JsonResponse({'error': 'No file was given'}, status=400)
+
+def admin_files(request):
+    # checks to see if user is an admin
+    if not request.user.is_staff:
+        return JsonResponse({'error': 'Unauthorized, please try again'}, status=403)
+
+    # List all files (for simplicity; add pagination and filtering as needed)
+    files = FileUpload.objects.all()
+    files_data = [{'name': file.file.name, 'url': file.file.url} for file in files]
+    return JsonResponse({'files': files_data})
