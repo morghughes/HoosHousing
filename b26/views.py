@@ -30,14 +30,18 @@ def index(request):
 def upload_file(request):
     if request.method == 'POST' and request.FILES['file']:
         file = request.FILES['file']
+        if file.content_type not in ['text/plain', 'application/pdf', 'image/jpeg']:
+            return JsonResponse({'error': 'File type not supported.'}, status=400)
+
         file_name = default_storage.save(file.name, file)
         file_url = default_storage.url(file_name)
 
-        file_upload = FileUpload(data=file_name, uploader=request.user if request.user.is_authenticated else None)
+        file_upload = FileUpload(data=file.name, uploader=request.user if request.user.is_authenticated else None)
         file_upload.save()
 
         return JsonResponse({'file_url': file_url})
     return JsonResponse({'error': 'No file was given'}, status=400)
+
 
 def admin_files(request):
     # checks to see if user is an admin
