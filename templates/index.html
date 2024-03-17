@@ -10,7 +10,12 @@
 <body>
     {% if user.is_authenticated %}
         <h1>Welcome, {{ request.user.username }}!</h1>
-        <p><a href="{% url 'logout' %}">Logout</a></p>
+	<!-- <p><a href="{% url 'logout' %}">Logout</a></p> -->
+
+	<form action="{% url 'logout' %}" method="post">
+	    {% csrf_token %}
+	    <button type="submit">Logout</button>
+	</form>
         
         <form id="file-upload-form" method="post" enctype="multipart/form-data">
             {% csrf_token %}
