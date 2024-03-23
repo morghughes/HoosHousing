@@ -17,6 +17,14 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username
+    
+class Report(models.Model):
+    report_comment = models.CharField(max_length=1000)
+    report_location = models.CharField(max_length=100)
+    report_file = models.FileField()
+    report_user = UserProfile()
+    def __str__(self):
+        return self.report_comment
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)

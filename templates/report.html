@@ -1,0 +1,16 @@
+<form action="{% url 'submit' %}" method="post">
+    <div class="form-floating mb-3">
+        <input type="text" class="form-control" name="location" id="location" placeholder="">
+        <label for="location">Where was this?</label>
+    </div>
+    <div class="form-floating">
+        <textarea class="form-control" placeholder="Please write your report here" id="comment" name="comment"></textarea>
+        <label for="comment">Please write your report here</label>
+        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+    </div><br>
+    <div class="form-floating">
+        <label for="file">Please input an image or pdf here.</label>
+        <input type="file" id="file" name="file" accept=".txt, .pdf, image/jpeg">
+    </div>
+    <input type="submit" value="SUBMIT">
+</form>

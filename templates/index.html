@@ -12,6 +12,7 @@
         <h1>Welcome, {{ request.user.username }}!</h1>
 	<!-- <p><a href="{% url 'logout' %}">Logout</a></p> -->
 
+    <a href="{% url 'report' %}">Make a report</a>
 	<form action="{% url 'logout' %}" method="post">
 	    {% csrf_token %}
 	    <button type="submit">Logout</button>

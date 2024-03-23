@@ -1,10 +1,16 @@
 from django.shortcuts import render
+from .models import Report
 
 from django.contrib.auth.decorators import login_required
 from .models import UserProfile
 from django.core.files.storage import default_storage
 from django.http import JsonResponse
 from .models import FileUpload
+from django.views import generic
+from django.utils import timezone
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
+import random
 
 
 @login_required
@@ -23,6 +29,15 @@ def index(request):
         }
 
     return render(request, 'index.html', context)
+
+class ReportView(generic.DetailView):
+    model = Report
+    template_name = "templates/report.html"
+
+class SubmittedView(generic.DetailView):
+    model = Report
+    template_name = "templates/submitted.html"
+
 
 # resources:
 # https://docs.djangoproject.com/en/3.2/topics/http/file-uploads/
@@ -52,3 +67,24 @@ def admin_files(request):
     files_data = [{'name': file.file.name, 'url': file.file.url}
                   for file in files]
     return JsonResponse({'files': files_data})
+
+def submit(request):
+    if request.method == 'POST' and request.FILES['file']:
+        file = request.FILES['file']
+        comment = request.POST.get("comment", "")
+        location = request.POST.get("location", "")
+        if not comment or not location:
+            return render(
+                request,
+                "templates/report.html",
+                {
+                    "error_message": "Please enter a location and describe what you're reporting."
+                }
+            )
+        else:
+            if request.user:
+                report = Report.objects.create(report_comment=comment, report_location=location, report_file=file, report_user=request.POST.get())
+            else:
+                report = Report.objects.create(report_comment=comment, report_location=location, report_file=file, report_user=None)
+            report.save()
+            return HttpResponseRedirect(reverse("submitted", args=()))
