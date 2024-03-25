@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome, ethan!</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 500px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Welcome, ethan!</h4>
+            </div>
+            <div class="card-body">
+                <a href="{% url 'logout' %}" class="btn btn-outline-secondary mb-3">Logout</a>
+            </a>
+                <form>
+                    <div class="custom-file mb-3">
+                        <input type="file" class="custom-file-input" id="fileUpload">
+                        <label class="custom-file-label" for="fileUpload">No file chosen</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Upload File</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <body>
+        {% if user.is_authenticated %}
+            <h1>Welcome, {{ request.user.username }}!</h1>
+            <p><a href="{% url 'logout' %}">Logout</a></p>
+            
+            <form id="file-upload-form" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="file" name="file" accept=".txt, .pdf, image/jpeg">
+                <button type="submit">Upload File</button>
+            </form>
+            <div id="messages"></div>
+    
+            <script type="text/javascript">
+                document.getElementById('file-upload-form').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    var formData = new FormData(this);
+                    fetch("{% url 'upload' %}", {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRFToken': formData.get('csrfmiddlewaretoken'),
+                        },
+                    })
+                    .then(response => {
+                        if(response.ok) {
+                            return response.json();
+                        } else {
+                            throw new Error('Server response wasnt OK');
+                        }
+                    })
+                    .then(data => {
+                        document.getElementById('messages').innerHTML = 
+                            '<p>File uploaded successfully! <a href="' + data.file_url + '" target="_blank">Click here to view your file</a>.</p>';
+                    })
+                    .catch(error => {
+                        document.getElementById('messages').innerHTML = 
+                            '<p>Error uploading file. Please try again.</p>';
+                        console.error('Error:', error);
+                    });
+                });
+            </script>
+    
+
+        {% endif %}
+    </body>
+    
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Update the file input label when a file is chosen
+        $(".custom-file-input").on("change", function() {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+    </script>
+</body>
+</html>
