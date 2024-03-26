@@ -6,51 +6,85 @@
 <head>
     <meta charset="UTF-8">
     <title>My Google OAuth Project</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #2b5fc8;
+        }
+        .container {
+            padding-top: 50px;
+        }
+        .card {
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
-    {% if user.is_authenticated %}
-        <h1>Welcome, {{ request.user.username }}!</h1>
-        <p><a href="{% url 'logout' %}">Logout</a></p>
-        
-        <form id="file-upload-form" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <input type="file" name="file" accept=".txt, .pdf, image/jpeg">
-            <button type="submit">Upload File</button>
-        </form>
-        <div id="messages"></div>
+    <div class="container">
+        {% if user.is_authenticated %}
+            <div class="card">
+                <div class="card-header">
+                    <h4>Welcome, {{ request.user.username }}!</h4>
+                </div>
+                <div class="card-body">
+                    <form id="file-upload-form" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="file-input">Choose a file to upload:</label>
+                            <input type="file" name="file" id="file-input" class="form-control-file" accept=".txt, .pdf, image/jpeg">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Upload File</button>
+                    </form>
+                    <div id="messages"></div>
 
-        <script type="text/javascript">
-            document.getElementById('file-upload-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                var formData = new FormData(this);
-                fetch("{% url 'upload' %}", {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-CSRFToken': formData.get('csrfmiddlewaretoken'),
-                    },
-                })
-                .then(response => {
-                    if(response.ok) {
-                        return response.json();
-                    } else {
-                        throw new Error('Server response wasnt OK');
-                    }
-                })
-                .then(data => {
-                    document.getElementById('messages').innerHTML = 
-                        '<p>File uploaded successfully! <a href="' + data.file_url + '" target="_blank">Click here to view your file</a>.</p>';
-                })
-                .catch(error => {
-                    document.getElementById('messages').innerHTML = 
-                        '<p>Error uploading file. Please try again.</p>';
-                    console.error('Error:', error);
-                });
-            });
-        </script>
-
-    {% else %}
-        <a href="{% provider_login_url 'google' %}">Login With Google</a>
-    {% endif %}
+                    <script type="text/javascript">
+                        document.getElementById('file-upload-form').addEventListener('submit', function(e) {
+                            e.preventDefault();
+                            var formData = new FormData(this);
+                            fetch("{% url 'upload' %}", {
+                                method: 'POST',
+                                body: formData,
+                                headers: {
+                                    'X-CSRFToken': formData.get('csrfmiddlewaretoken'),
+                                },
+                            })
+                            .then(response => {
+                                if(response.ok) {
+                                    return response.json();
+                                } else {
+                                    throw new Error('Server response wasn\'t OK');
+                                }
+                            })
+                            .then(data => {
+                                document.getElementById('messages').innerHTML =
+                                    '<p class="alert alert-success">File uploaded successfully! <a href="' + data.file_url + '" target="_blank">Click here to view your file</a>.</p>';
+                            })
+                            .catch(error => {
+                                document.getElementById('messages').innerHTML =
+                                    '<p class="alert alert-danger">Error uploading file. Please try again.</p>';
+                                console.error('Error:', error);
+                            });
+                        });
+                    </script>
+                </div>
+            </div>
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Logout</button>
+            </form>
+        {% else %}
+            <div class="card">
+                <div class="card-header">
+                    <h4>Login</h4>
+                </div>
+                <div class="card-body">
+                    <a href="{% provider_login_url 'google' %}" class="btn btn-primary">Login With Google</a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
 </body>
 </html>

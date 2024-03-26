@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.views.generic import TemplateView
+# from django.views.generic import TemplateView
 from django.contrib.auth.views import LogoutView
 
 from b26 import views
@@ -28,5 +28,9 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),
     path('upload/', views.upload_file, name='upload'),
     path('admin/files/', views.admin_files, name='admin_files'),
+    path('welcome/', views.welcome_view, name='welcome'),
+
+
+
 
 ]
