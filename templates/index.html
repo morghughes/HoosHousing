@@ -59,11 +59,11 @@
                                 }
                             })
                             .then(data => {
-                                document.getElementById('messages').innerHTML = 
+                                document.getElementById('messages').innerHTML =
                                     '<p class="alert alert-success">File uploaded successfully! <a href="' + data.file_url + '" target="_blank">Click here to view your file</a>.</p>';
                             })
                             .catch(error => {
-                                document.getElementById('messages').innerHTML = 
+                                document.getElementById('messages').innerHTML =
                                     '<p class="alert alert-danger">Error uploading file. Please try again.</p>';
                                 console.error('Error:', error);
                             });

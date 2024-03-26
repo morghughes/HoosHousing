@@ -27,20 +27,19 @@ def index(request):
 # resources:
 # https://docs.djangoproject.com/en/3.2/topics/http/file-uploads/
 
+
 def upload_file(request):
     if request.method == 'POST' and request.FILES['file']:
         file = request.FILES['file']
         file_name = default_storage.save(file.name, file)
         file_url = default_storage.url(file_name)
-        
+
         file_upload = FileUpload(data=file.name, uploader=request.user)
         file_upload.save()
-        
+
         return JsonResponse({'file_url': file_url})
     else:
         return JsonResponse({'error': 'No file was given'}, status=400)
-    
-
 
 
 def admin_files(request):
@@ -50,7 +49,8 @@ def admin_files(request):
 
     # List all files (for simplicity; add pagination and filtering as needed)
     files = FileUpload.objects.all()
-    files_data = [{'name': file.file.name, 'url': file.file.url} for file in files]
+    files_data = [{'name': file.file.name, 'url': file.file.url}
+                  for file in files]
     return JsonResponse({'files': files_data})
 
 def welcome_view(request):
