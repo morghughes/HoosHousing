@@ -16,10 +16,12 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='FileUpload',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
                 ('data', models.FileField(null=True, upload_to='user_uploads/')),
                 ('time_added', models.DateTimeField(auto_now_add=True)),
-                ('uploader', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='file_uploads', to=settings.AUTH_USER_MODEL)),
+                ('uploader', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                 related_name='file_uploads', to=settings.AUTH_USER_MODEL)),
             ],
         ),
     ]
