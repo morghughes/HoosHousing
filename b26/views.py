@@ -32,11 +32,12 @@ def index(request):
 
 class ReportView(generic.DetailView):
     model = Report
-    template_name = "templates/report.html"
+    template_name = "report.html"
+    context_object_name = 'report'
 
 class SubmittedView(generic.DetailView):
     model = Report
-    template_name = "templates/submitted.html"
+    template_name = "submitted.html"
 
 
 # resources:
@@ -68,21 +69,26 @@ def admin_files(request):
                   for file in files]
     return JsonResponse({'files': files_data})
 
-
 def welcome_view(request):
     return render(request, 'welcome.html')
 
+def report_view(request):
+    return render(request, 'report.html')
+
 def submit(request):
-    if request.method == 'POST' and request.FILES['file']:
-        file = request.FILES['file']
-        comment = request.POST.get("comment", "")
-        location = request.POST.get("location", "")
-        if not comment or not location:
+    if request.method == 'POST':
+        if 'file' in request.FILES:
+            file = request.FILES['file']
+        else:
+            file = None
+        comment = request.POST.get("comment", "").strip()
+        location = request.POST.get("location", "").strip()
+        if not comment or not location or not file:
             return render(
                 request,
-                "templates/report.html",
+                "report.html",
                 {
-                    "error_message": "Please enter a location and describe what you're reporting."
+                    "error_message": "Please enter a location, describe what you're reporting, and submit a valid image/pdf."
                 }
             )
         else:
@@ -91,4 +97,4 @@ def submit(request):
             else:
                 report = Report.objects.create(report_comment=comment, report_location=location, report_file=file, report_user=None)
             report.save()
-            return HttpResponseRedirect(reverse("submitted", args=()))
+            return HttpResponseRedirect(reverse("submitted"))

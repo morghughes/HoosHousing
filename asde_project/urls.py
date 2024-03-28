@@ -27,13 +27,10 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('upload/', views.upload_file, name='upload'),
-    path('report/', views.ReportView.as_view(), name="report"),
+    path('report/<int:pk>/', views.ReportView.as_view(), name="report"),
+    path('report/', views.report_view, name='report_no_param'),
     path('submitted/', views.SubmittedView.as_view(), name="submitted"),
     path('submit/', views.submit, name = "submit"),
     path('admin/files/', views.admin_files, name='admin_files'),
     path('welcome/', views.welcome_view, name='welcome'),
-
-
-
-
 ]

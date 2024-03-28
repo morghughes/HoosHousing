@@ -30,6 +30,7 @@
                     <h4>Welcome, {{ request.user.username }}!</h4>
                 </div>
                 <div class="card-body">
+                    <a href="{% url 'report' pk=1 %}">Make a report</a>
                     <form id="file-upload-form" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="form-group">

@@ -19,8 +19,9 @@ class UserProfile(models.Model):
         return self.user.username
     
 class Report(models.Model):
+    id = models.AutoField(primary_key=True)
     report_comment = models.CharField(max_length=1000)
-    report_location = models.CharField(max_length=100)
+    report_location = models.CharField(max_length=200)
     report_file = models.FileField()
     report_user = UserProfile()
     def __str__(self):
