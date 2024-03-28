@@ -28,7 +28,7 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),
     path('upload/', views.upload_file, name='upload'),
     path('report/', views.ReportView.as_view(), name="report"),
-    path('<int:pk>/submitted/', views.SubmittedView.as_view(), name="submitted"),
-    path('<int:question_id>/submit/', views.submit, name = "submit"),
+    path('submitted/', views.SubmittedView.as_view(), name="submitted"),
+    path('submit/', views.submit, name = "submit"),
     path('admin/files/', views.admin_files, name='admin_files'),
 ]

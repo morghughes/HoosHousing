@@ -83,7 +83,7 @@ def submit(request):
             )
         else:
             if request.user:
-                report = Report.objects.create(report_comment=comment, report_location=location, report_file=file, report_user=request.POST.get())
+                report = Report.objects.create(report_comment=comment, report_location=location, report_file=file, report_user=request.user)
             else:
                 report = Report.objects.create(report_comment=comment, report_location=location, report_file=file, report_user=None)
             report.save()
