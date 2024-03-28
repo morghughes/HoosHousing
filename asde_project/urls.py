@@ -31,4 +31,9 @@ urlpatterns = [
     path('submitted/', views.SubmittedView.as_view(), name="submitted"),
     path('submit/', views.submit, name = "submit"),
     path('admin/files/', views.admin_files, name='admin_files'),
+    path('welcome/', views.welcome_view, name='welcome'),
+
+
+
+
 ]

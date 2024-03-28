@@ -68,6 +68,10 @@ def admin_files(request):
                   for file in files]
     return JsonResponse({'files': files_data})
 
+
+def welcome_view(request):
+    return render(request, 'welcome.html')
+
 def submit(request):
     if request.method == 'POST' and request.FILES['file']:
         file = request.FILES['file']
