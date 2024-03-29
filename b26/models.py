@@ -23,7 +23,7 @@ class Report(models.Model):
     report_comment = models.CharField(max_length=1000)
     report_location = models.CharField(max_length=200)
     report_file = models.FileField()
-    report_user = UserProfile()
+    report_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     def __str__(self):
         return self.report_comment
 

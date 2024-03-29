@@ -81,8 +81,8 @@ def submit(request):
             file = request.FILES['file']
         else:
             file = None
-        comment = request.POST.get("comment", "").strip()
-        location = request.POST.get("location", "").strip()
+        comment = request.POST.get("comment", "")
+        location = request.POST.get("location", "")
         if not comment or not location or not file:
             return render(
                 request,
@@ -93,7 +93,8 @@ def submit(request):
             )
         else:
             if request.user:
-                report = Report.objects.create(report_comment=comment, report_location=location, report_file=file, report_user=request.user)
+                current_user = UserProfile.objects.get(user=request.user)
+                report = Report.objects.create(report_comment=comment, report_location=location, report_file=file, report_user=current_user)
             else:
                 report = Report.objects.create(report_comment=comment, report_location=location, report_file=file, report_user=None)
             report.save()
