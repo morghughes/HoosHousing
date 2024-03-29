@@ -32,7 +32,8 @@
                 <div class="card-body">
                     <a href="{% url 'report' %}">Make a report</a>
                     <p>
-                        {% if user.is_staff %}
+{#                        {% if user.is_staff %}#}
+                        {% if user.userprofile.is_site_admin %}
                             <a href="{% url 'admin_files' %}">View Admin Files</a>
                         {% endif %}
                     </p>

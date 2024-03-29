@@ -71,8 +71,7 @@ def upload_file(request):
 #     files_data = [{'name': file.file.name, 'url': file.file.url}
 #                   for file in files]
 #     return JsonResponse({'files': files_data})
-    
-@staff_member_required
+
 def admin_files(request):
     reports = Report.objects.all()
     return render(request, 'admin_files.html', {'reports': reports})
