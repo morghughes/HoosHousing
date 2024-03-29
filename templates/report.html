@@ -1,18 +1,18 @@
 <form action="{% url 'submit' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    <h1>Report an Issue</h1>
+    <h1>Report Form</h1>
     <div class="form-floating mb-3">
         <label for="location">Where was this?</label><br>
         <input type="text" class="form-control" name="location" id="location" placeholder="" style="width: 250px;"><br><br>
     </div>
     <div class="form-floating">
-        <label for="comment">Please write your report here</label><br>
+        <label for="comment">Add details about your report here:</label><br>
         <textarea class="form-control" placeholder="Please write your report here" id="comment" name="comment" style="width: 350px;"></textarea>
         {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
     </div><br>
     <div class="form-floating">
-        <label for="file">Please input an image or pdf here.</label><br>
-        <input type="file" id="file" name="file" accept=".pdf, .jpeg, .png, .jpg">
+        <label for="file">Upload an image or pdf here:</label><br>
+        <input type="file" id="file" name="files" accept=".pdf, .jpeg, .png, .jpg" multiple>
     </div><br><br>
     <input type="submit" value="SUBMIT">
 </form>

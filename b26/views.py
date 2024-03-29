@@ -10,6 +10,7 @@ from django.views import generic
 from django.utils import timezone
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
+from django.views.generic import TemplateView
 import random
 
 
@@ -35,7 +36,7 @@ class ReportView(generic.DetailView):
     template_name = "report.html"
     context_object_name = 'report'
 
-class SubmittedView(generic.DetailView):
+class SubmittedView(TemplateView):
     model = Report
     template_name = "submitted.html"
 
@@ -77,13 +78,16 @@ def report_view(request):
 
 def submit(request):
     if request.method == 'POST':
-        if 'file' in request.FILES:
-            file = request.FILES['file']
-        else:
-            file = None
         comment = request.POST.get("comment", "")
         location = request.POST.get("location", "")
-        if not comment or not location or not file:
+        files = request.FILES.getlist('files')
+        # if 'file' in request.FILES:
+        #     file = request.FILES['file']
+        # else:
+        #     file = None
+        # comment = request.POST.get("comment", "")
+        # location = request.POST.get("location", "")
+        if not comment or not location or not files:
             return render(
                 request,
                 "report.html",
@@ -92,10 +96,14 @@ def submit(request):
                 }
             )
         else:
-            if request.user:
+            if request.user.is_authenticated:
                 current_user = UserProfile.objects.get(user=request.user)
-                report = Report.objects.create(report_comment=comment, report_location=location, report_file=file, report_user=current_user)
+                report = Report.objects.create(report_comment=comment, report_location=location, report_user=current_user)
             else:
-                report = Report.objects.create(report_comment=comment, report_location=location, report_file=file, report_user=None)
+                report = Report.objects.create(report_comment=comment, report_location=location, report_user=None)
             report.save()
+
+            for file in files:
+                FileUpload.objects.create(data=file, uploader=request.user, report=report)
+
             return HttpResponseRedirect(reverse("submitted"))

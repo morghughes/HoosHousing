@@ -22,8 +22,8 @@ class Report(models.Model):
     id = models.AutoField(primary_key=True)
     report_comment = models.CharField(max_length=1000)
     report_location = models.CharField(max_length=200)
-    report_file = models.FileField()
-    report_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    # report_file = models.FileField()
+    report_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True)
     def __str__(self):
         return self.report_comment
 
@@ -49,6 +49,11 @@ class FileUpload(models.Model):
         settings.AUTH_USER_MODEL, related_name='file_uploads', on_delete=models.CASCADE, null=True, blank=True)
     data = models.FileField(upload_to='user_uploads/', null=True)
     time_added = models.DateTimeField(auto_now_add=True)
+    # added to ensure that FileUploads are associated with particular Reports
+    report = models.ForeignKey(Report, on_delete=models.CASCADE, related_name='uploads', null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = "File Uploads"
 
     def __str__(self):
         return f"{'Anonymous' if not self.uploader else self.uploader.get_username()} uploaded {self.data.name}"
