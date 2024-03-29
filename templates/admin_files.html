@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All Submissions</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+  <div class="container">
+    <h2>All Submissions</h2>
+    <button onclick="goBack()" class="btn btn-secondary mb-3">Go Back</button>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Report ID</th>
+          <th>Comment</th>
+          <th>Location</th>
+          <th>Uploader</th>
+          <th>Uploaded Files</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for report in reports %}
+          <tr>
+            <td>{{ report.id }}</td>
+            <td>{{ report.report_comment }}</td>
+            <td>{{ report.report_location }}</td>
+            <td>{{ report.report_user }}</td>
+            <td>
+              {% for file_upload in report.uploads.all %}
+                <a href="{{ file_upload.data.url }}" target="_blank">{{ file_upload.data.name }}</a><br>
+              {% endfor %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    function goBack() {
+      window.history.back();
+    }
+  </script>
+<body/>
