@@ -13,6 +13,7 @@ from django.utils import timezone
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import TemplateView
+from django.contrib.auth.views import LoginView
 import random
 
 
@@ -41,6 +42,16 @@ class ReportView(generic.DetailView):
 class SubmittedView(TemplateView):
     model = Report
     template_name = "submitted.html"
+
+# class CustomLoginView(LoginView):
+#     def get_redirect_url(self):
+#         user = self.request.user
+#         if user.is_authenticated:
+#             if user.userprofile.is_site_admin:
+#                 return reverse('admin_files') # redirect site admins straight to page with all the reports
+#             else:
+#                 return reverse('index') # redirect normal users to the index page
+#         return super().get_redirect_url()
 
 
 # resources:

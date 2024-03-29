@@ -18,13 +18,14 @@ from django.contrib import admin
 from django.urls import path, include
 # from django.views.generic import TemplateView
 from django.contrib.auth.views import LogoutView
-
 from b26 import views
+# from b26.views import CustomLoginView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='home'),
     path('accounts/', include('allauth.urls')),
+    # path('accounts/login', CustomLoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('upload/', views.upload_file, name='upload'),
     path('report/', views.report_view, name='report'),

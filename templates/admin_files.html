@@ -2,13 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>All Submissions</title>
+    <title>All Report Submissions</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
   <div class="container">
     <h2>All Submissions</h2>
-    <button onclick="goBack()" class="btn btn-secondary mb-3">Go Back</button>
+{#    <button onclick="goBack()" class="btn btn-secondary mb-3">Go Back</button>#}
+      <form action="{% url 'logout' %}" method="post">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-primary">Logout</button>
+      </form>
     <table class="table">
       <thead>
         <tr>
