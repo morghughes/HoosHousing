@@ -31,6 +31,6 @@ urlpatterns = [
     path('report/', views.report_view, name='report'),
     path('submitted/', views.SubmittedView.as_view(), name="submitted"),
     path('submit/', views.submit, name = "submit"),
-    path('admin_files/', views.admin_files, name='admin_files'),
+    path('view_reports/', views.view_reports, name='view_reports'),
     path('welcome/', views.welcome_view, name='welcome'),
 ]

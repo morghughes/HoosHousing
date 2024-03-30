@@ -83,8 +83,11 @@ def upload_file(request):
 #                   for file in files]
 #     return JsonResponse({'files': files_data})
 
-def admin_files(request):
-    reports = Report.objects.all()
+def view_reports(request):
+    if request.user.userprofile.is_site_admin:
+        reports = Report.objects.all()
+    else:
+        reports = Report.objects.filter(report_user=request.user.userprofile)
     return render(request, 'admin_files.html', {'reports': reports})
 
 

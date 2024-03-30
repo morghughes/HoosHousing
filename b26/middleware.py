@@ -9,5 +9,5 @@ class AdminRedirectMiddleware:
         just_logged_in = request.session.pop('just_logged_in', False)
         if just_logged_in and request.user.is_authenticated and hasattr(request.user, 'userprofile'):
             if request.user.userprofile.is_site_admin:
-                return redirect('admin_files')
+                return redirect('view_reports')
         return self.get_response(request)
