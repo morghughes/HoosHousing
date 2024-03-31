@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Report
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.admin.views.decorators import staff_member_required
@@ -13,6 +13,7 @@ from django.urls import reverse
 from django.views.generic import TemplateView
 from django.contrib.auth.views import LoginView
 from django.views.decorators.http import require_POST
+from django.contrib import messages
 import random
 
 
@@ -54,6 +55,20 @@ def upload_file(request):
         return JsonResponse({'file_url': file_url})
     else:
         return JsonResponse({'error': 'No file was given'}, status=400)
+
+def update_resolution(request, report_id):
+    if not (request.user.is_authenticated and request.user.userprofile.is_site_admin):
+        return redirect('some_error_page')
+
+    report = get_object_or_404(Report, pk=report_id)
+    if request.method == "POST":
+        report_response = request.POST.get("report_response", "")
+        if report_response:
+            report.report_response = report_response
+            report.save()
+            messages.success(request, "Resolution details updated successfully.")
+            return redirect('report_detail', report_id=report_id)
+    return redirect('report_detail', report_id=report_id)
 
 @require_POST
 def mark_report_complete(request, report_id):

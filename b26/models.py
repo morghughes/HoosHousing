@@ -23,7 +23,7 @@ class Report(models.Model):
     report_comment = models.CharField(max_length=1000)
     report_location = models.CharField(max_length=200)
     report_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True)
-
+    report_response = models.TextField(null=True, blank=True)
     NEW = 'New'
     IN_PROGRESS = 'In Progress'
     COMPLETE = 'Complete'

@@ -15,6 +15,15 @@
 </head>
 <body>
 <div class="container py-5">
+    {% if messages %}
+        <div class="row">
+            <div class="col-md-12">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card">
@@ -51,9 +60,27 @@
                     {% for file_upload in report.uploads.all %}
                         <a href="{{ file_upload.data.url }}" target="_blank">{{ file_upload.data.name }}</a><br>
                     {% endfor %}
-                    <a href="{% url 'view_reports' %}" class="btn btn-primary">Back to All Reports</a>
+
+                    {% if report.report_status == 'Complete' and user.is_authenticated and not user.userprofile.is_site_admin%}
+                        <p><strong>Resolution:</strong></p>
+                        <p>{{ report.report_response }}</p>
+                    {% endif %}
+
+                    {% if user.userprofile.is_site_admin and user.is_authenticated %}
+                        {% if report.report_status == 'Complete' %}
+                            <form action="{% url 'update_resolution' report.id %}" method="post">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="reportResponse">Resolution Details:</label>
+                                    <textarea class="form-control" id="reportResponse" name="report_response" rows="3">{{ report.report_response }}</textarea>
+                                </div>
+                                <button type="submit" class="btn btn-info">Submit Resolution</button>
+                            </form>
+                        {% endif %}
+                    {% endif %}
                 </div>
             </div>
+            <a href="{% url 'view_reports' %}" class="btn btn-danger">Back to All Reports</a>
         </div>
     </div>
 </div>
