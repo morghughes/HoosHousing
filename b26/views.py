@@ -14,6 +14,7 @@ from django.views.generic import TemplateView
 from django.contrib.auth.views import LoginView
 from django.views.decorators.http import require_POST
 from django.contrib import messages
+from django.contrib.messages import constants as message_constants
 import random
 
 
@@ -66,7 +67,7 @@ def update_resolution(request, report_id):
         if report_response:
             report.report_response = report_response
             report.save()
-            messages.success(request, "Resolution details updated successfully.")
+            messages.add_message(request, message_constants.SUCCESS, "Resolution details updated successfully.", extra_tags='resolution_update')
             return redirect('report_detail', report_id=report_id)
     return redirect('report_detail', report_id=report_id)
 
