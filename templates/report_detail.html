@@ -49,8 +49,9 @@
                             {% endif %}
                         " disabled>{{ report.report_status }}</button>
                     </p>
-                    <p><strong>Comment:</strong> {{ report.report_comment }}</p>
                     <p><strong>Location:</strong> {{ report.report_location }}</p>
+                    <p><strong>Comment:</strong></p>
+                    <p> {{ report.report_comment }} </p>
                     {% if user.userprofile.is_site_admin and user.is_authenticated %}
                         <p><strong>Uploader:</strong> {{ report.report_user }}</p>
                     {% endif %}
