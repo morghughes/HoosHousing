@@ -19,6 +19,8 @@ from django.urls import path, include
 # from django.views.generic import TemplateView
 from django.contrib.auth.views import LogoutView
 from b26 import views
+from b26.views import mark_report_complete
+
 # from b26.views import CustomLoginView
 
 urlpatterns = [
@@ -34,4 +36,5 @@ urlpatterns = [
     path('view_reports/', views.view_reports, name='view_reports'),
     path('reports/<int:report_id>/', views.report_detail, name='report_detail'),
     path('welcome/', views.welcome_view, name='welcome'),
+    path('reports/<int:report_id>/mark_complete/', mark_report_complete, name='mark_complete'),
 ]

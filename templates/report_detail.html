@@ -18,11 +18,30 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card">
-                <div class="card-header">
+{#                <div class="card-header">#}
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="card-title">Report Details</h4>
+                    {% if user.userprofile.is_site_admin and user.is_authenticated %}
+                        <form action="{% url 'mark_complete' report.id %}" method="post">
+                            {% csrf_token %}
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="completeStatus" name="completeStatus"
+                                       onchange="this.form.submit()" {% if report.report_status == 'Complete' %}checked{% endif %}>
+                                <label class="custom-control-label" for="completeStatus">Mark as Complete</label>
+                            </div>
+                        </form>
+                    {% endif %}
                 </div>
                 <div class="card-body">
                     <p><strong>ID:</strong> {{ report.id }}</p>
+                    <p><strong>Status:</strong>
+                        <button class="btn
+                            {% if report.report_status == 'New' %}btn-primary
+                            {% elif report.report_status == 'In Progress' %}btn-warning
+                            {% elif report.report_status == 'Complete' %}btn-success
+                            {% endif %}
+                        " disabled>{{ report.report_status }}</button>
+                    </p>
                     <p><strong>Comment:</strong> {{ report.report_comment }}</p>
                     <p><strong>Location:</strong> {{ report.report_location }}</p>
                     {% if user.userprofile.is_site_admin and user.is_authenticated %}

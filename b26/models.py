@@ -22,8 +22,18 @@ class Report(models.Model):
     id = models.AutoField(primary_key=True)
     report_comment = models.CharField(max_length=1000)
     report_location = models.CharField(max_length=200)
-    # report_file = models.FileField()
     report_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True)
+
+    NEW = 'New'
+    IN_PROGRESS = 'In Progress'
+    COMPLETE = 'Complete'
+    STATUS_CHOICES = [
+        (NEW, 'New'),
+        (IN_PROGRESS, 'In Progress'),
+        (COMPLETE, 'Complete'),
+    ]
+
+    report_status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=NEW)
     def __str__(self):
         return self.report_comment
 

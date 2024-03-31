@@ -35,16 +35,25 @@
                             <thead>
                             <tr>
                                 <th>Report ID</th>
-                                <th>Location</th>
                                 <th>Uploader</th>
+                                <th>Location</th>
+                                <th>Status</th>
                             </tr>
                             </thead>
                             <tbody>
                             {% for report in reports %}
                                 <tr>
                                     <td><a href="{% url 'report_detail' report.id %}">{{ report.id }}</a></td>
-                                    <td>{{ report.report_location }}</td>
                                     <td>{{ report.report_user }}</td>
+                                    <td>{{ report.report_location }}</td>
+                                    <td>
+                                        <button class="btn
+                                            {% if report.report_status == 'New' %}btn-primary
+                                            {% elif report.report_status == 'In Progress' %}btn-warning
+                                            {% elif report.report_status == 'Complete' %}btn-success
+                                            {% endif %}
+                                        " disabled>{{ report.report_status }}</button>
+                                    </td>
                                 </tr>
                             {% endfor %}
                             </tbody>

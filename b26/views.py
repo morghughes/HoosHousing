@@ -12,6 +12,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import TemplateView
 from django.contrib.auth.views import LoginView
+from django.views.decorators.http import require_POST
 import random
 
 
@@ -41,21 +42,6 @@ class SubmittedView(TemplateView):
     model = Report
     template_name = "submitted.html"
 
-# class CustomLoginView(LoginView):
-#     def get_redirect_url(self):
-#         user = self.request.user
-#         if user.is_authenticated:
-#             if user.userprofile.is_site_admin:
-#                 return reverse('admin_files') # redirect site admins straight to page with all the reports
-#             else:
-#                 return reverse('index') # redirect normal users to the index page
-#         return super().get_redirect_url()
-
-
-# resources:
-# https://docs.djangoproject.com/en/3.2/topics/http/file-uploads/
-
-
 def upload_file(request):
     if request.method == 'POST' and request.FILES['file']:
         file = request.FILES['file']
@@ -69,19 +55,24 @@ def upload_file(request):
     else:
         return JsonResponse({'error': 'No file was given'}, status=400)
 
+@require_POST
+def mark_report_complete(request, report_id):
+    report = get_object_or_404(Report, pk=report_id)
+    if request.user.is_authenticated and request.user.userprofile.is_site_admin:
+        # Check if the checkbox was checked or not
+        if 'completeStatus' in request.POST:
+            report.report_status = 'Complete'
+        else:
+            report.report_status = 'In Progress'  # Or any other default status
+        report.save()
+    return HttpResponseRedirect(reverse('report_detail', args=[report_id]))
 
-# def admin_files(request):
-#     # checks to see if user is an admin
-#     if not request.user.is_staff:
-#         return JsonResponse({'error': 'Unauthorized, please try again'}, status=403)
-
-#     # List all files (for simplicity; add pagination and filtering as needed)
-#     files = FileUpload.objects.all()
-#     files_data = [{'name': file.file.name, 'url': file.file.url}
-#                   for file in files]
-#     return JsonResponse({'files': files_data})
 def report_detail(request, report_id):
     report = get_object_or_404(Report, pk=report_id)
+    if request.user.is_authenticated and request.user.userprofile.is_site_admin:
+        if report.report_status == Report.NEW:
+            report.report_status = Report.IN_PROGRESS
+            report.save()
     return render(request, 'report_detail.html', {'report': report})
 
 def view_reports(request):
