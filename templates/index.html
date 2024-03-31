@@ -85,7 +85,7 @@
             </div>
             <form action="{% url 'logout' %}" method="post">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-primary">Logout</button>
+                <button type="submit" class="btn btn-danger">Logout</button>
             </form>
         {% else %}
             <div class="card">

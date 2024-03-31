@@ -1,0 +1,42 @@
+{% load static %}
+{% load i18n %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Report Detail</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #2b5fc8;
+        }
+    </style>
+</head>
+<body>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Report Details</h4>
+                </div>
+                <div class="card-body">
+                    <p><strong>ID:</strong> {{ report.id }}</p>
+                    <p><strong>Comment:</strong> {{ report.report_comment }}</p>
+                    <p><strong>Location:</strong> {{ report.report_location }}</p>
+                    {% if user.userprofile.is_site_admin and user.is_authenticated %}
+                        <p><strong>Uploader:</strong> {{ report.report_user }}</p>
+                    {% endif %}
+                    <p><strong>Uploaded Files:</strong></p>
+                    {% for file_upload in report.uploads.all %}
+                        <a href="{{ file_upload.data.url }}" target="_blank">{{ file_upload.data.name }}</a><br>
+                    {% endfor %}
+                    <a href="{% url 'view_reports' %}" class="btn btn-primary">Back to All Reports</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

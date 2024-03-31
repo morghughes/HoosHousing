@@ -32,5 +32,6 @@ urlpatterns = [
     path('submitted/', views.SubmittedView.as_view(), name="submitted"),
     path('submit/', views.submit, name = "submit"),
     path('view_reports/', views.view_reports, name='view_reports'),
+    path('reports/<int:report_id>/', views.report_detail, name='report_detail'),
     path('welcome/', views.welcome_view, name='welcome'),
 ]

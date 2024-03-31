@@ -1,49 +1,59 @@
+{% load static %}
+{% load i18n %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>All Report Submissions</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #2b5fc8;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h2>All Submissions</h2>
-{#    <button onclick="goBack()" class="btn btn-secondary mb-3">Go Back</button>#}
-      <form action="{% url 'logout' %}" method="post">
-          {% csrf_token %}
-          <button type="submit" class="btn btn-primary">Logout</button>
-      </form>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Report ID</th>
-          <th>Comment</th>
-          <th>Location</th>
-          <th>Uploader</th>
-          <th>Uploaded Files</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for report in reports %}
-          <tr>
-            <td>{{ report.id }}</td>
-            <td>{{ report.report_comment }}</td>
-            <td>{{ report.report_location }}</td>
-            <td>{{ report.report_user }}</td>
-            <td>
-              {% for file_upload in report.uploads.all %}
-                <a href="{{ file_upload.data.url }}" target="_blank">{{ file_upload.data.name }}</a><br>
-              {% endfor %}
-            </td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-
-  <script>
-    function goBack() {
-      window.history.back();
-    }
-  </script>
-<body/>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">All Submissions</h4>
+                </div>
+                <div class="card-body">
+                    {% if user.userprofile.is_site_admin and user.is_authenticated %}
+                        <form action="{% url 'logout' %}" method="post" class="mb-3">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Logout</button>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'home' %}" class="btn btn-primary">Back to Home</a>
+                    {% endif %}
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Report ID</th>
+                                <th>Location</th>
+                                <th>Uploader</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for report in reports %}
+                                <tr>
+                                    <td><a href="{% url 'report_detail' report.id %}">{{ report.id }}</a></td>
+                                    <td>{{ report.report_location }}</td>
+                                    <td>{{ report.report_user }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

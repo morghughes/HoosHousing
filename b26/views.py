@@ -1,9 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Report
-
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.admin.views.decorators import staff_member_required
-
 from .models import UserProfile
 from django.core.files.storage import default_storage
 from django.http import JsonResponse
@@ -82,6 +80,9 @@ def upload_file(request):
 #     files_data = [{'name': file.file.name, 'url': file.file.url}
 #                   for file in files]
 #     return JsonResponse({'files': files_data})
+def report_detail(request, report_id):
+    report = get_object_or_404(Report, pk=report_id)
+    return render(request, 'report_detail.html', {'report': report})
 
 def view_reports(request):
     if request.user.userprofile.is_site_admin:
@@ -89,7 +90,6 @@ def view_reports(request):
     else:
         reports = Report.objects.filter(report_user=request.user.userprofile)
     return render(request, 'admin_files.html', {'reports': reports})
-
 
 def welcome_view(request):
     return render(request, 'welcome.html')
