@@ -1,0 +1,50 @@
+{% load i18n %}
+{% load account socialaccount %}
+
+<html>
+<head>
+ <meta charset="utf-8">
+ <title>{% trans "Sign Up" %}</title>
+ <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+ <style>
+   body {
+     background-color: #2b5fc8;
+   }
+   .container {
+     margin-top: 50px;
+   }
+   .card {
+     margin-bottom: 20px;
+   }
+ </style>
+</head>
+<body>
+ <div class="container">
+   <div class="row justify-content-center">
+     <div class="col-md-6">
+       <div class="card">
+         <div class="card-header">
+           <h4 class="card-title">{% trans "Sign Up" %}</h4>
+         </div>
+         <div class="card-body">
+           <form method="POST" action="{% url 'account_signup' %}">
+             {% csrf_token %}
+             {{ form.as_p }}
+             <button type="submit" class="btn btn-primary">{% trans "Sign Up" %}</button>
+           </form>
+           <hr>
+           <p>{% trans "Already have an account?" %} <a href="{% url 'account_login' %}">{% trans "Sign in" %}</a></p>
+           <p>{% trans "Or use a third-party to sign up" %}</p>
+           {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+         </div>
+       </div>
+     </div>
+   </div>
+ </div>
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+

@@ -1,18 +1,61 @@
-<form action="{% url 'submit' %}" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <h1>Report Form</h1>
-    <div class="form-floating mb-3">
-        <label for="location">Where was this?</label><br>
-        <input type="text" class="form-control" name="location" id="location" placeholder="" style="width: 250px;"><br><br>
+{% load i18n %}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>{% trans "Report Form" %}</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #2b5fc8;
+    }
+    .container {
+      padding-top: 20px;
+    }
+    .card {
+      margin: auto;
+      max-width: 600px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title">{% trans "Report Form" %}</h4>
+          </div>
+          <div class="card-body">
+            <form action="{% url 'submit' %}" method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="form-group">
+                <label for="location">{% trans "Where was this?" %}</label>
+                <input type="text" class="form-control" name="location" id="location" placeholder="">
+              </div>
+              <div class="form-group">
+                <label for="comment">{% trans "Add details about your report here:" %}</label>
+                <textarea class="form-control" id="comment" name="comment" placeholder="{% trans 'Please write your report here' %}"></textarea>
+                {% if error_message %}<div class="alert alert-danger" role="alert">{{ error_message }}</div>{% endif %}
+              </div>
+              <div class="form-group">
+                <label for="file">{% trans "Upload an image or pdf here:" %}</label>
+                <input type="file" class="form-control-file" id="file" name="files" accept=".pdf, .jpeg, .png, .jpg" multiple>
+              </div>
+              <button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="form-floating">
-        <label for="comment">Add details about your report here:</label><br>
-        <textarea class="form-control" placeholder="Please write your report here" id="comment" name="comment" style="width: 350px;"></textarea>
-        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-    </div><br>
-    <div class="form-floating">
-        <label for="file">Upload an image or pdf here:</label><br>
-        <input type="file" id="file" name="files" accept=".pdf, .jpeg, .png, .jpg" multiple>
-    </div><br><br>
-    <input type="submit" value="SUBMIT">
-</form>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+
+

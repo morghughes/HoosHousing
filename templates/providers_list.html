@@ -1,0 +1,12 @@
+{% load socialaccount %}
+{% load static %}
+
+<ul class="socialaccount_providers list-unstyled">
+  {% for provider in providers %}
+    <li class="socialaccount_provider">
+      <a href="{% provider_login_url provider.id process=process %}" class="btn btn-outline-secondary">
+        Sign in with {{ provider.name }}
+      </a>
+    </li>
+  {% endfor %}
+</ul>
