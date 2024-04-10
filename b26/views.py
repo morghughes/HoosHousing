@@ -139,15 +139,3 @@ def submit(request):
                 FileUpload.objects.create(data=file, uploader=request.user, report=report)
 
             return HttpResponseRedirect(reverse("submitted"))
-        
-def upvote_report(request, report_id):
-    if not request.user.is_authenticated or not request.user.userprofile.is_site_admin:
-        return JsonResponse({'error': 'You must be a site admin to upvote.'}, status=403)
-
-    report = get_object_or_404(Report, pk=report_id)
-    user_profile = request.user.userprofile
-
-    if report.upvote(user_profile):
-        return JsonResponse({'success': True, 'upvote_count': report.upvote_count()})
-    else:
-        return JsonResponse({'success': False, 'error': 'You have already upvoted this report.'})
