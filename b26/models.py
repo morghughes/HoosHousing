@@ -48,6 +48,7 @@ class Report(models.Model):
     report_type = models.CharField(max_length=20, choices=TYPE_CHOICES, null=True, blank=True)
     def __str__(self):
         return self.report_comment
+    
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
@@ -85,3 +86,15 @@ class FileUpload(models.Model):
 def ensure_user_profile_exists(sender, instance, created, **kwargs):
     UserProfile.objects.get_or_create(user=instance)
     instance.userprofile.save()
+
+class Upvote(models.Model):
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    report = models.ForeignKey(Report, on_delete=models.CASCADE, related_name='upvotes')
+    date_upvoted = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        # Ensuring a user can only upvote a report once
+        unique_together = ('user', 'report')
+
+    def __str__(self):
+        return f"{self.user} upvoted {self.report}"
