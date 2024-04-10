@@ -38,4 +38,5 @@ urlpatterns = [
     path('welcome/', views.welcome_view, name='welcome'),
     path('reports/<int:report_id>/mark_complete/', mark_report_complete, name='mark_complete'),
     path('reports/<int:report_id>/update_resolution/', views.update_resolution, name='update_resolution'),
+    # path('report/<int:report_id>/upvote/', views.upvote_report, name='upvote_report'),
 ]
