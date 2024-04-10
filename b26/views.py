@@ -102,12 +102,16 @@ def welcome_view(request):
     return render(request, 'welcome.html')
 
 def report_view(request):
-    return render(request, 'report.html')
+    context = {
+        'TYPE_CHOICES': Report.TYPE_CHOICES,
+    }
+    return render(request, 'report.html', context)
 
 def submit(request):
     if request.method == 'POST':
         comment = request.POST.get("comment", "")
         location = request.POST.get("location", "")
+        type = request.POST.get("type", "")
         files = request.FILES.getlist('files')
         # if 'file' in request.FILES:
         #     file = request.FILES['file']
@@ -126,9 +130,9 @@ def submit(request):
         else:
             if request.user.is_authenticated:
                 current_user = UserProfile.objects.get(user=request.user)
-                report = Report.objects.create(report_comment=comment, report_location=location, report_user=current_user)
+                report = Report.objects.create(report_comment=comment, report_location=location, report_user=current_user, report_type=type)
             else:
-                report = Report.objects.create(report_comment=comment, report_location=location, report_user=None)
+                report = Report.objects.create(report_comment=comment, report_location=location, report_user=None, report_type=type)
             report.save()
 
             for file in files:

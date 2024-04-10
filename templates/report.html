@@ -35,6 +35,15 @@
                 <input type="text" class="form-control" name="location" id="location" placeholder="">
               </div>
               <div class="form-group">
+                <label for="type">{% trans "Select report type:" %}</label>
+                <select class="form-control" id="type" name="type">
+                  <option value="">{{ 'Select Type' }}</option>
+                  {% for type, label in TYPE_CHOICES %}
+                    <option value="{{ type }}">{{ label }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="form-group">
                 <label for="comment">{% trans "Add details about your report here:" %}</label>
                 <textarea class="form-control" id="comment" name="comment" placeholder="{% trans 'Please write your report here' %}"></textarea>
                 {% if error_message %}<div class="alert alert-danger" role="alert">{{ error_message }}</div>{% endif %}
