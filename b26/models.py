@@ -21,7 +21,19 @@ class UserProfile(models.Model):
 class Report(models.Model):
     id = models.AutoField(primary_key=True)
     report_comment = models.CharField(max_length=1000)
-    report_location = models.CharField(max_length=200)
+
+    LOCATION_POSSIBILITIES = [
+        ("Balz-Dobie", "Balz-Dobie"), ("Cauthen", "Cauthen"), ("Gibbons", "Gibbons"), ("Kellogg", "Kellogg"),
+        ("Lile-Maupin", "Lile-Maupin"), ("Shannon", "Shannon"), ("Tuttle-Dunnington", "Tuttle-Dunnington"),
+        ("Watson-Webb", "Watson-Webb"), ("Woody", "Woody"), ("Courtenay", "Courtenay"), ("Dunglison", "Dunglison"),
+        ("Fitzhugh", "Fitzhugh"), ("Brown College", "Brown College"), ("Gooch", "Gooch"), ("Dillard", "Dillard"),
+        ("Hereford College", "Hereford College"), ("International Residential College", "International Residential College"),
+        ("Bonnycastle", "Bonnycastle"), ("Dabney", "Dabney"), ("Echols", "Echols"), ("Emmet", "Emmet"),
+        ("Hancock", "Hancock"), ("Humphreys", "Humphreys"), ("Kent", "Kent"), ("Lefevre", "Lefevre"), ("Metcalf", "Metcalf"), ("Page", "Page"),
+        ("Bice", "Bice"), ("Bond", "Bond"),("Copeley", "Copeley"),("Faulkner", "Faulkner"),("Lambeth", "Lambeth"),(" French House", "French House"),
+        ("Spanish House", "Spanish House"), ("Shea House", "Shea House"),
+    ]
+    report_location = models.CharField(max_length=250, choices=LOCATION_POSSIBILITIES, default="Balz-Dobie")
     report_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True)
     report_response = models.TextField(null=True, blank=True)
     NEW = 'New'
