@@ -92,11 +92,17 @@ def report_detail(request, report_id):
     return render(request, 'report_detail.html', {'report': report})
 
 def view_reports(request):
-    if request.user.userprofile.is_site_admin:
-        reports = Report.objects.all()
+    all_reports = Report.objects.all()
+    if not request.user.userprofile.is_site_admin:
+        user_reports = all_reports.filter(report_user=request.user.userprofile)
     else:
-        reports = Report.objects.filter(report_user=request.user.userprofile)
-    return render(request, 'admin_files.html', {'reports': reports})
+        user_reports = all_reports
+
+    return render(request, 'admin_files.html', {
+        'all_reports': all_reports,
+        'user_reports': user_reports,
+    })
+
 
 def welcome_view(request):
     return render(request, 'welcome.html')
