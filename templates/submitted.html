@@ -1,2 +1,32 @@
-<label>Thank you! Your report has been submitted!</label>
-<a href="{% url 'home' %}"><input type="submit" value="Return to home"></a>
+
+{% load i18n %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% trans "Thank you for submitting your report! " %}</title>
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body { background: #2b5fc8; }
+        .main-container { padding-top: 150px; }
+    </style>
+</head>
+<body>
+    <div class="container main-container">
+        <div class="d-flex justify-content-center">
+            <div class="col-sm-8 col-md-6">
+                <div class="card text-center">
+                    <header class="card-header">
+                        <h3 class="card-title">{% trans "Report Submitted" %}</h3>
+                    </header>
+                    <article class="card-body">
+                        <p>{% trans "Thank you! Your report has been submitted!" %}</p>
+                        <div class="mt-4">
+                            <a href="{% url 'home' %}" class="btn btn-primary">{% trans "Back" %}</a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
