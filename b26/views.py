@@ -1,11 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Report
+from .models import Report, UserProfile, FileUpload
+from django.db.models import Q
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.admin.views.decorators import staff_member_required
-from .models import UserProfile
 from django.core.files.storage import default_storage
 from django.http import JsonResponse
-from .models import FileUpload
 from django.views import generic
 from django.utils import timezone
 from django.http import HttpResponse, HttpResponseRedirect
@@ -109,6 +108,7 @@ def report_view(request):
 
 def submit(request):
     if request.method == 'POST':
+        title = request.POST.get("title", "")
         comment = request.POST.get("comment", "")
         location = request.POST.get("location", "")
         type = request.POST.get("type", "")
@@ -128,11 +128,29 @@ def submit(request):
                 }
             )
         else:
+            similar_reports = Report.objects.filter(
+               Q(report_type=type) & Q(report_location=location) & ~Q(report_status='Complete')
+            )
+            title_words = title.split()
+            if len(similar_reports) != 0:
+                for similar in similar_reports:
+                    counter = 0
+                    for word in title_words:
+                        if similar.report_title.lower().__contains__(word.lower()):
+                            counter += 1
+                            if counter > len(title_words)/2 or counter > 4:
+                                return render(
+                                    request,
+                                    "report.html",
+                                    {
+                                        "error_message": f"There is already an active {type.lower()} report in {location} that is similar in title to yours."
+                                    }
+                                )
             if request.user.is_authenticated:
                 current_user = UserProfile.objects.get(user=request.user)
-                report = Report.objects.create(report_comment=comment, report_location=location, report_user=current_user, report_type=type)
+                report = Report.objects.create(report_title=title, report_comment=comment, report_location=location, report_user=current_user, report_type=type)
             else:
-                report = Report.objects.create(report_comment=comment, report_location=location, report_user=None, report_type=type)
+                report = Report.objects.create(report_title=title, report_comment=comment, report_location=location, report_user=None, report_type=type)
             report.save()
 
             for file in files:

@@ -79,6 +79,10 @@
                 </select>
               </div>
               <div class="form-group">
+                <label for="comment">{% trans "Enter a one-line summary about your report here (ex: '3rd floor lobby loud at 3am'):" %}</label>
+                <input type="text" class="form-control" id="title" name="title" placeholder="{% trans 'Please summarize your report here' %}" max="60"></textarea>
+              </div>
+              <div class="form-group">
                 <label for="comment">{% trans "Add details about your report here:" %}</label>
                 <textarea class="form-control" id="comment" name="comment" placeholder="{% trans 'Please write your report here' %}"></textarea>
                 {% if error_message %}<div class="alert alert-danger" role="alert">{{ error_message }}</div>{% endif %}
