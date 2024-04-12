@@ -22,6 +22,7 @@ class UserProfile(models.Model):
 class Report(models.Model):
     id = models.AutoField(primary_key=True)
     report_comment = models.CharField(max_length=1000)
+    report_title = models.CharField(max_length=60, default='')
 
     LOCATION_POSSIBILITIES = [
         ("Balz-Dobie", "Balz-Dobie"), ("Cauthen", "Cauthen"), ("Gibbons", "Gibbons"), ("Kellogg", "Kellogg"),
@@ -67,7 +68,7 @@ class Report(models.Model):
     public_files = models.BooleanField(default=False, verbose_name="Public Files")
 
     def __str__(self):
-        return self.report_comment
+        return self.report_title
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)

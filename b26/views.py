@@ -4,6 +4,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.core.files.storage import default_storage
 from django.http import JsonResponse
 from .models import FileUpload, Report, UserProfile
+from django.db.models import Q
 from django.views import generic
 from django.utils import timezone
 from django.http import HttpResponse, HttpResponseRedirect
@@ -119,6 +120,7 @@ def report_view(request):
         'LOCATION_POSSIBILITIES': Report.LOCATION_POSSIBILITIES,
         'location': '',
         'type': '',
+        'title': '',
         'comment': '',
         'is_public': False,
         'public_description': False,
@@ -133,6 +135,7 @@ def submit(request):
         'TYPE_CHOICES': Report.TYPE_CHOICES,
         'location': '',
         'type': '',
+        'title': '',
         'comment': '',
         'is_public': False,
         'public_description': False,
@@ -143,21 +146,39 @@ def submit(request):
         context.update({
             'location': request.POST.get("location", ""),
             'type': request.POST.get("type", ""),
+            'title': request.POST.get("title", ""),
             'comment': request.POST.get("comment", ""),
             'is_public': request.POST.get('is_public') == 'on',
             'public_description': request.POST.get('public_description') == 'on',
             'public_files': request.POST.get('public_files') == 'on',
         })
 
-        if not context['comment'] or not context['location'] or not request.FILES.getlist('files'):
+        if not context['comment'] or not context['location'] or not context['title'] or not request.FILES.getlist('files'):
             messages.error(request, "Please ensure all fields not marked 'Optional' are answered. You are not required to fill any checkboxes.", extra_tags='form_error')
         elif not context['is_public'] and (context['public_description'] or context['public_files']):
             messages.error(request, "You cannot share description or files if the overall privacy is still private.", extra_tags='form_error')
         else:
+            similar_reports = Report.objects.filter(
+               Q(report_type=context['type']) & Q(report_location=context['location']) & ~Q(report_status='Complete') & Q(is_public=True)
+            )
+            title_words = context['title'].split()
+            if len(similar_reports) != 0:
+                for similar in similar_reports:
+                    counter = 0
+                    similar_words = similar.report_title.split()
+                    for word in title_words:
+                        if similar_words.__contains__(word.lower()):
+                            exceptions = ['and', 'the', 'of', 'my', 'a', 'to', 'have', 'i', 'in']
+                            if not exceptions.__contains__(word.lower()):
+                                counter += 1
+                                if counter > len(title_words)/2 or counter > 4:
+                                    messages.error(request, f"There is already an active {context['type'].lower()} report in {context['location']} that is similar in title to yours.", extra_tags='form_error')
+                                    return render(request, "report.html", context)
             if request.user.is_authenticated:
                 current_user = UserProfile.objects.get(user=request.user)
                 report = Report.objects.create(
                     report_comment=context['comment'],
+                    report_title=context['title'],
                     report_location=context['location'],
                     report_user=current_user,
                     report_type=context['type'],
