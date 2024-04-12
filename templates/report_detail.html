@@ -23,7 +23,7 @@
         {% endfor %}
     {% endif %}
     <div class="row justify-content-center">
-        <div class="col-md-6">
+        <div class="col-md-8 mb-4">
             <div class="card">
 {#                <div class="card-header">#}
                 <div class="card-header d-flex justify-content-between align-items-center">
@@ -41,6 +41,10 @@
                 </div>
                 <div class="card-body">
                     <p><strong>ID:</strong> {{ report.id }}</p>
+                    {% if user.userprofile.is_site_admin and user.is_authenticated %}
+                        <p><strong>Uploader:</strong> {{ report.report_user }}</p>
+                    {% endif %}
+
                     <p><strong>Status:</strong>
                         <button class="btn
                             {% if report.report_status == 'New' %}btn-primary
@@ -50,17 +54,19 @@
                         " disabled>{{ report.report_status }}</button>
                     </p>
                     <p><strong>Location:</strong> {{ report.report_location }}</p>
-                    <p><strong>Comment:</strong></p>
-                    <p> {{ report.report_comment }} </p>
-                    {% if user.userprofile.is_site_admin and user.is_authenticated %}
-                        <p><strong>Uploader:</strong> {{ report.report_user }}</p>
-                    {% endif %}
-                    <p><strong>Uploaded Files:</strong></p>
-                    {% for file_upload in report.uploads.all %}
-                        <a href="{{ file_upload.data.url }}" target="_blank">{{ file_upload.data.name }}</a><br>
-                    {% endfor %}
 
-                    {% if report.report_status == 'Complete' and user.is_authenticated and not user.userprofile.is_site_admin%}
+                    {% if report.public_description or report.report_user == user.userprofile or user.userprofile.is_site_admin %}
+                        <p><strong>Comment:</strong> {{ report.report_comment }}</p>
+                    {% endif %}
+
+                    {% if report.public_files or report.report_user == user.userprofile or user.userprofile.is_site_admin %}
+                        <p><strong>Uploaded Files:</strong></p>
+                        {% for file_upload in report.uploads.all %}
+                            <a href="{{ file_upload.data.url }}" target="_blank">{{ file_upload.data.name }}</a><br>
+                        {% endfor %}
+                    {% endif %}
+
+                    {% if report.report_status == 'Complete' and user.is_authenticated and report.report_user == user.userprofile%}
                         <p><strong>Resolution:</strong></p>
                         <p>{{ report.report_response }}</p>
                     {% endif %}
@@ -79,7 +85,9 @@
                     {% endif %}
                 </div>
             </div>
-            <a href="{% url 'view_reports' %}" class="btn btn-danger">Back to All Reports</a>
+            <div class="mt-3">
+                <a href="{% url 'view_reports' %}" class="btn btn-danger">Back to All Reports</a>
+            </div>
         </div>
     </div>
 </div>

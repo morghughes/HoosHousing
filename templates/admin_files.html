@@ -17,17 +17,17 @@
 <div class="container py-5">
     <div class="row justify-content-center">
         {% if user.userprofile.is_site_admin and user.is_authenticated %}
-            <!-- Single Card for Site Admins Showing All Reports -->
+            <!-- Card for Site Admins Showing All Reports -->
             <div class="col-md-8">
+                <form action="{% url 'logout' %}" method="post" class="mb-3">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Logout</button>
+                </form>
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">All Submissions</h4>
                     </div>
                     <div class="card-body">
-                        <form action="{% url 'logout' %}" method="post" class="mb-3">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-danger">Logout</button>
-                        </form>
                         <div class="table-responsive">
                             <table class="table">
                                 <thead>
@@ -121,9 +121,9 @@
                                     </thead>
                                     <tbody>
                                     {% for report in all_reports %}
-                                        {% if report not in user_reports %}
+                                        {% if report not in user_reports and report.is_public%}
                                             <tr>
-                                                <td>{{ report.id }}</td>
+                                                <td><a href="{% url 'report_detail' report.id %}">{{ report.id }}</a></td>
                                                 <td>{{ report.report_location }}</td>
                                                 <td>
                                                     <button class="btn
