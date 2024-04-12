@@ -120,6 +120,7 @@ def report_view(request):
         'LOCATION_POSSIBILITIES': Report.LOCATION_POSSIBILITIES,
         'location': '',
         'type': '',
+        'title': '',
         'comment': '',
         'is_public': False,
         'public_description': False,
@@ -134,6 +135,7 @@ def submit(request):
         'TYPE_CHOICES': Report.TYPE_CHOICES,
         'location': '',
         'type': '',
+        'title': '',
         'comment': '',
         'is_public': False,
         'public_description': False,
@@ -151,7 +153,7 @@ def submit(request):
             'public_files': request.POST.get('public_files') == 'on',
         })
 
-        if not context['comment'] or not context['location'] or not request.FILES.getlist('files'):
+        if not context['comment'] or not context['location'] or not context['title'] or not request.FILES.getlist('files'):
             messages.error(request, "Please ensure all fields not marked 'Optional' are answered. You are not required to fill any checkboxes.", extra_tags='form_error')
         elif not context['is_public'] and (context['public_description'] or context['public_files']):
             messages.error(request, "You cannot share description or files if the overall privacy is still private.", extra_tags='form_error')
