@@ -55,7 +55,7 @@
                                                 {% endif %}
                                             " disabled>{{ report.report_status }}</button>
                                             <a href="#" class="upvote-btn" data-report-id="{{ report.id }}">
-                                                <i class="fa fa-thumbs-up" aria-hidden="true"></i> 
+                                                <i class="fas fa-thumbs-up" aria-hidden="true"></i>
                                                 <span id="upvote-count-{{ report.id }}">{{ report.upvotes }}</span>
                                             </a>
                                         </td>
@@ -151,11 +151,11 @@
                                                         {% elif report.report_status == 'Complete' %}btn-success
                                                         {% endif %}
                                                     " disabled>{{ report.report_status }}
+                                                    </button>
                                                     <a href="#" class="upvote-btn" data-report-id="{{ report.id }}">
-                                                        <span class="glyphicon glyphicon-thumbs-up"></span>
+                                                        <i class="fas fa-thumbs-up" aria-hidden="true"></i>
                                                         <span id="upvote-count-{{ report.id }}">{{ report.upvotes }}</span>
                                                     </a>
-                                                    </button>
                                                 </td>
                                             </tr>
                                         {% endif %}

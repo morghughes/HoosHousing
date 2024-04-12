@@ -199,3 +199,5 @@ def upvote_report(request, report_id):
     report.upvotes += 1
     report.save()
     return redirect('view_reports')
+    # new_upvote_count = report.upvotes 
+    # return JsonResponse({'upvotes': new_upvote_count})
