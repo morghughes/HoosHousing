@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <title>Report Submissions</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <style>
         body {
             background-color: #2b5fc8;
@@ -53,6 +54,10 @@
                                                 {% elif report.report_status == 'Complete' %}btn-success
                                                 {% endif %}
                                             " disabled>{{ report.report_status }}</button>
+                                            <a href="#" class="upvote-btn" data-report-id="{{ report.id }}">
+                                                <i class="fa fa-thumbs-up" aria-hidden="true"></i> 
+                                                <span id="upvote-count-{{ report.id }}">{{ report.upvotes }}</span>
+                                            </a>
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -97,6 +102,10 @@
                                             {% elif report.report_status == 'Complete' %}btn-success
                                             {% endif %}
                                         " disabled>{{ report.report_status }}</button>
+                                        <a href="#" class="upvote-btn" data-report-id="{{ report.id }}">
+                                            <i class="fas fa-thumbs-up" aria-hidden="true"></i>
+                                            <span id="upvote-count-{{ report.id }}">{{ report.upvotes }}</span>
+                                        </a>
                                             </td>
                                         </tr>
                                     {% endfor %}
@@ -142,6 +151,10 @@
                                                         {% elif report.report_status == 'Complete' %}btn-success
                                                         {% endif %}
                                                     " disabled>{{ report.report_status }}
+                                                    <a href="#" class="upvote-btn" data-report-id="{{ report.id }}">
+                                                        <span class="glyphicon glyphicon-thumbs-up"></span>
+                                                        <span id="upvote-count-{{ report.id }}">{{ report.upvotes }}</span>
+                                                    </a>
                                                     </button>
                                                 </td>
                                             </tr>
@@ -161,5 +174,27 @@
         {% endif %}
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('.upvote-btn').on('click', function(e) {
+        e.preventDefault();
+        var reportId = $(this).data('report-id');
+        $.ajax({
+            type: "POST",
+            url: "{% url 'upvote_report' 999999 %}".replace('999999', reportId),
+            data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
+            success: function(data) {
+                $('#upvote-count-' + reportId).text(data.upvotes);
+            },
+            error: function(xhr, status, error) {
+                console.log("Error upvoting report: " + error);
+            }
+        });
+    });
+});
+</script>
 </body>
 </html>

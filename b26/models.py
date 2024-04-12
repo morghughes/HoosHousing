@@ -23,6 +23,8 @@ class Report(models.Model):
     id = models.AutoField(primary_key=True)
     report_comment = models.CharField(max_length=1000)
     report_title = models.CharField(max_length=60, default='')
+    upvotes = models.IntegerField(default=0)
+
 
     LOCATION_POSSIBILITIES = [
         ("Balz-Dobie", "Balz-Dobie"), ("Cauthen", "Cauthen"), ("Gibbons", "Gibbons"), ("Kellogg", "Kellogg"),
