@@ -41,10 +41,11 @@
                 </div>
                 <div class="card-body">
                     <p><strong>ID:</strong> {{ report.id }}</p>
+                    <!-- Only shows uploader if site admin -->
                     {% if user.userprofile.is_site_admin and user.is_authenticated %}
                         <p><strong>Uploader:</strong> {{ report.report_user }}</p>
                     {% endif %}
-
+                    <!-- Shows status, location, and title to all users, but won't be visible if the report is private since option to expand into this .html doc won't exist -->
                     <p><strong>Status:</strong>
                         <button class="btn
                             {% if report.report_status == 'New' %}btn-primary
@@ -53,24 +54,25 @@
                             {% endif %}
                         " disabled>{{ report.report_status }}</button>
                     </p>
+                    <p><strong>Title:</strong> {{ report.report_title }}</p>
                     <p><strong>Location:</strong> {{ report.report_location }}</p>
-
+                    <!-- Shows only if public description option was checked -->
                     {% if report.public_description or report.report_user == user.userprofile or user.userprofile.is_site_admin %}
-                        <p><strong>Comment:</strong> {{ report.report_comment }}</p>
+                        <p><strong>Description:</strong> {{ report.report_comment }}</p>
                     {% endif %}
-
+                    <!-- Shows only if public files option was checked -->
                     {% if report.public_files or report.report_user == user.userprofile or user.userprofile.is_site_admin %}
                         <p><strong>Uploaded Files:</strong></p>
                         {% for file_upload in report.uploads.all %}
                             <a href="{{ file_upload.data.url }}" target="_blank">{{ file_upload.data.name }}</a><br>
                         {% endfor %}
                     {% endif %}
-
+                    <!-- Shows resolution details only to the uploader, and only if report is complete -->
                     {% if report.report_status == 'Complete' and user.is_authenticated and report.report_user == user.userprofile%}
                         <p><strong>Resolution:</strong></p>
                         <p>{{ report.report_response }}</p>
                     {% endif %}
-
+                    <!-- Shows editable resolution details to only the site admin, and only if the report is complete -->
                     {% if user.userprofile.is_site_admin and user.is_authenticated %}
                         {% if report.report_status == 'Complete' %}
                             <form action="{% url 'update_resolution' report.id %}" method="post">

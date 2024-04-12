@@ -35,6 +35,7 @@
                                     <th>Report ID</th>
                                     <th>Uploader</th>
                                     <th>Location</th>
+                                    <th>Title</th>
                                     <th>Status</th>
                                 </tr>
                                 </thead>
@@ -44,6 +45,7 @@
                                         <td><a href="{% url 'report_detail' report.id %}">{{ report.id }}</a></td>
                                         <td>{{ report.report_user }}</td>
                                         <td>{{ report.report_location }}</td>
+                                        <td>{{ report.report_title }}</td>
                                         <td>
                                             <button class="btn
                                                 {% if report.report_status == 'New' %}btn-primary
@@ -78,6 +80,7 @@
                                     <tr>
                                         <th>Report ID</th>
                                         <th>Location</th>
+                                        <th>Title</th>
                                         <th>Status</th>
                                     </tr>
                                     </thead>
@@ -86,6 +89,7 @@
                                         <tr>
                                             <td><a href="{% url 'report_detail' report.id %}">{{ report.id }}</a></td>
                                             <td>{{ report.report_location }}</td>
+                                            <td>{{ report.report_title }}</td>
                                             <td>
                                                 <button class="btn
                                             {% if report.report_status == 'New' %}btn-primary
@@ -116,6 +120,7 @@
                                     <tr>
                                         <th>Report ID</th>
                                         <th>Location</th>
+                                        <th>Title</th>
                                         <th>Status</th>
                                     </tr>
                                     </thead>
@@ -123,15 +128,21 @@
                                     {% for report in all_reports %}
                                         {% if report not in user_reports and report.is_public%}
                                             <tr>
+                                                {% if not report.public_description and not report.public_files %}
+                                                    <td>{{ report.id }}</td>
+                                                {% else %}
                                                 <td><a href="{% url 'report_detail' report.id %}">{{ report.id }}</a></td>
+                                                {% endif %}
                                                 <td>{{ report.report_location }}</td>
+                                                <td>{{ report.report_title }}</td>
                                                 <td>
                                                     <button class="btn
-                                            {% if report.report_status == 'New' %}btn-primary
-                                            {% elif report.report_status == 'In Progress' %}btn-warning
-                                            {% elif report.report_status == 'Complete' %}btn-success
-                                            {% endif %}
-                                        " disabled>{{ report.report_status }}</button>
+                                                        {% if report.report_status == 'New' %}btn-primary
+                                                        {% elif report.report_status == 'In Progress' %}btn-warning
+                                                        {% elif report.report_status == 'Complete' %}btn-success
+                                                        {% endif %}
+                                                    " disabled>{{ report.report_status }}
+                                                    </button>
                                                 </td>
                                             </tr>
                                         {% endif %}
