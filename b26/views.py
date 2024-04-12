@@ -193,3 +193,9 @@ def submit(request):
         return render(request, "report.html", context)
 
     return render(request, "report.html", context)
+
+def upvote_report(request, report_id):
+    report = get_object_or_404(Report, id=report_id)
+    report.upvotes += 1
+    report.save()
+    return redirect('view_reports')
