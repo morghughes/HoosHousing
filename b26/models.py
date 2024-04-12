@@ -17,7 +17,8 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username
-    
+
+
 class Report(models.Model):
     id = models.AutoField(primary_key=True)
     report_comment = models.CharField(max_length=1000)
@@ -36,16 +37,18 @@ class Report(models.Model):
     report_location = models.CharField(max_length=250, choices=LOCATION_POSSIBILITIES, default="Balz-Dobie")
     report_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True)
     report_response = models.TextField(null=True, blank=True)
+
     NEW = 'New'
     IN_PROGRESS = 'In Progress'
     COMPLETE = 'Complete'
+
     STATUS_CHOICES = [
         (NEW, 'New'),
         (IN_PROGRESS, 'In Progress'),
         (COMPLETE, 'Complete'),
     ]
-
     report_status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=NEW)
+
     NOISE = "Noise"
     MAINTENANCE = "Maintenance"
     SANITATION = "Sanitation"
@@ -58,6 +61,11 @@ class Report(models.Model):
         (OTHER, 'Other')
     ]
     report_type = models.CharField(max_length=20, choices=TYPE_CHOICES, null=True, blank=True)
+
+    is_public = models.BooleanField(default=False, verbose_name="Make report public")
+    public_description = models.BooleanField(default=False, verbose_name="Public Description")
+    public_files = models.BooleanField(default=False, verbose_name="Public Files")
+
     def __str__(self):
         return self.report_comment
 
