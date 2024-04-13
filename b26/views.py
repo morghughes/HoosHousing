@@ -110,8 +110,8 @@ def view_reports(request):
     })
 
 
-def welcome_view(request):
-    return render(request, 'welcome.html')
+def signin_view(request):
+    return render(request, 'login.html')
 
 
 def report_view(request):
@@ -179,20 +179,22 @@ def submit(request):
                                     return render(request, "report.html", context)
             if request.user.is_authenticated:
                 current_user = UserProfile.objects.get(user=request.user)
-                report = Report.objects.create(
-                    report_comment=context['comment'],
-                    report_title=context['title'],
-                    report_location=context['location'],
-                    report_user=current_user,
-                    report_type=context['type'],
-                    is_public=context['is_public'],
-                    public_description=context['public_description'],
-                    public_files=context['public_files']
-                )
+            else:
+                current_user = None
+            report = Report.objects.create(
+                report_comment=context['comment'],
+                report_title=context['title'],
+                report_location=context['location'],
+                report_user=current_user,
+                report_type=context['type'],
+                is_public=context['is_public'],
+                public_description=context['public_description'],
+                public_files=context['public_files']
+            )
 
-                for file in request.FILES.getlist('files'):
-                    FileUpload.objects.create(data=file, uploader=request.user, report=report)
-                return HttpResponseRedirect(reverse("submitted"))
+            for file in request.FILES.getlist('files'):
+                FileUpload.objects.create(data=file, uploader=request.user, report=report)
+            return HttpResponseRedirect(reverse("submitted"))
         return render(request, "report.html", context)
 
     return render(request, "report.html", context)

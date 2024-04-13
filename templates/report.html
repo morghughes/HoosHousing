@@ -71,10 +71,12 @@
                       {% endfor %}
                 </select>
               </div>
-              <div class="form-group">
-                  <input type="checkbox" name="is_public" id="is_public" {% if is_public %}checked{% endif %}>
-                  <label for="is_public" class="checkbox-label">{% trans "Would you like to make your report public so that other users can upvote your report? By checking this, you are consenting that other users may view your report's title, ID, location, and status. They will not be able to see your username or any other information unspecified." %}</label>
-              </div>
+              {% if user.is_authenticated %}
+                  <div class="form-group">
+                      <input type="checkbox" name="is_public" id="is_public" {% if is_public %}checked{% endif %}>
+                      <label for="is_public" class="checkbox-label">{% trans "Would you like to make your report public so that other users can upvote your report? By checking this, you are consenting that other users may view your report's title, ID, location, and status. They will not be able to see your username or any other information unspecified." %}</label>
+                  </div>
+              {% endif %}
               <div class="form-group">
                 <label for="title">{% trans "Provide a one-line title about your report:" %}</label>
                 <input type="text" class="form-control" id="title" name="title" placeholder="{% trans "ex: '3rd floor lobby loud at 3am'" %}" value="{{ title }}" maxlength="60"></input>
@@ -84,20 +86,22 @@
                   <textarea class="form-control" id="comment" name="comment" placeholder="{% trans 'Provide details for report here' %}">{{ comment }}</textarea>
                   {% if error_message %}<div class="alert alert-danger" role="alert">{{ error_message }}</div>{% endif %}
               </div>
-                <div class="form-group">
-                    <input type="checkbox" name="public_description" id="public_description" {% if public_description %}checked{% endif %}>
-                    <label for="public_description" class="checkbox-label">{% trans "Make description public?" %}</label>
-                </div>
-
+                {% if user.is_authenticated %}
+                    <div class="form-group">
+                        <input type="checkbox" name="public_description" id="public_description" {% if public_description %}checked{% endif %}>
+                        <label for="public_description" class="checkbox-label">{% trans "Make description public?" %}</label>
+                    </div>
+                {% endif %}
               <div class="form-group">
                 <label for="file">{% trans "Upload files (Optional):" %}</label>
                 <input type="file" class="form-control-file" id="file" name="files" accept=".pdf, .jpeg, .png, .jpg" multiple>
               </div>
-                <div class="form-group">
-                    <input type="checkbox" name="public_files" id="public_files" {% if public_files %}checked{% endif %}>
-                    <label for="public_files" class="checkbox-label">{% trans "Make files public?" %}</label>
-                </div>
-
+                {% if user.is_authenticated %}
+                    <div class="form-group">
+                        <input type="checkbox" name="public_files" id="public_files" {% if public_files %}checked{% endif %}>
+                        <label for="public_files" class="checkbox-label">{% trans "Make files public?" %}</label>
+                    </div>
+                {% endif %}
                 <div class="form-group row">
                     <div class="col-sm-6">
                         <button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>

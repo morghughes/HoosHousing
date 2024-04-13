@@ -39,7 +39,7 @@ class Report(models.Model):
         ("Spanish House", "Spanish House"), ("Shea House", "Shea House"),
     ]
     report_location = models.CharField(max_length=250, choices=LOCATION_POSSIBILITIES, default="Balz-Dobie")
-    report_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True)
+    report_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True)
     report_response = models.TextField(null=True, blank=True)
 
     NEW = 'New'
