@@ -194,6 +194,7 @@ def submit(request):
 
     return render(request, "report.html", context)
 
+
 def upvote_report(request, report_id):
     if not request.user.is_authenticated:
         return JsonResponse({'error': 'Authentication required'}, status=401)
@@ -209,5 +210,16 @@ def upvote_report(request, report_id):
 
     report.save()
     return JsonResponse({'upvotes': report.upvotes, 'upvoted': request.user in report.upvoters.all()})
-    # new_upvote_count = report.upvotes 
-    # return JsonResponse({'upvotes': new_upvote_count})
+
+
+@login_required
+def delete_report(request, report_id):
+    if request.method == 'POST':
+        report = get_object_or_404(Report, id=report_id, report_user=request.user.userprofile)
+        try:
+            report.delete()
+            return JsonResponse({'deleted': True})
+        except Exception as e:
+            return JsonResponse({'deleted': False, 'error': str(e)}, status=500)
+    else:
+        return JsonResponse({'deleted': False, 'error': 'Invalid request'}, status=400)

@@ -85,14 +85,6 @@
                                                 {% elif report.report_status == 'Complete' %}btn-success
                                                 {% endif %}
                                             " disabled>{{ report.report_status }}</button>
-{#                                            <a href="#" class="upvote-btn" data-report-id="{{ report.id }}">#}
-{#                                                {% if request.user in report.upvoters.all %}#}
-{#                                                    <i class="fas fa-thumbs-up text-primary" aria-hidden="true"></i>#}
-{#                                                {% else %}#}
-{#                                                    <i class="fas fa-thumbs-up text-muted" aria-hidden="true"></i>#}
-{#                                                {% endif %}#}
-{#                                                <span id="upvote-count-{{ report.id }}">{{ report.upvotes }}</span>#}
-{#                                            </a>#}
                                         </td>
                                         <td class="centered">{{ report.upvotes }}</td>
                                     </tr>
@@ -107,6 +99,18 @@
             <div class="row justify-content-center">
                 <!-- Card for User's Own Reports -->
                 <div class="col-md-8 mb-4">
+                    <div id="message-container">
+                        {% if messages %}
+                            {% for message in messages %}
+                                {% if 'delete_error' in message.tags %}
+                                    <div class="alert alert-danger">{{ message }}</div>
+                                {% endif %}
+                                {% if 'delete_success' in message.tags %}
+                                    <div class="alert alert-success"> {{ message }}</div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
                     <div class="mb-3">
                         <a href="{% url 'home' %}" class="btn btn-secondary">Back to Home</a>
                     </div>
@@ -128,7 +132,7 @@
                                     </thead>
                                     <tbody>
                                     {% for report in user_reports %}
-                                        <tr class="centered">
+                                        <tr class="centered" id="report-row-{{ report.id }}">
                                             <td class="title-column" onclick="toggleExpansion(this)">
                                                 {{ report.report_title }}
                                                 <i class="fas fa-chevron-down"></i>
@@ -145,6 +149,11 @@
                                             </td>
                                             <td>
                                                 {{ report.upvotes }}
+                                            </td>
+                                            <td class="centered">
+                                                <a href="#" class="btn delete-btn" data-report-id="{{ report.id }}" title="Delete Report">
+                                                    <i class="fas fa-times text-danger"></i>
+                                                </a>
                                             </td>
                                         </tr>
                                     {% endfor %}
@@ -259,6 +268,36 @@
     function toggleExpansion(element) {
         element.classList.toggle('expanded');
     }
+</script>
+<script>
+    $('.delete-btn').on('click', function(e) {
+        e.preventDefault();
+        var reportId = $(this).data('report-id');  // Get the report ID from the data attribute
+        if (confirm('Are you sure you would like to delete this report (ID = ' + reportId + ')? This means that the resolution will be discontinued if it is not already finished! This cannot be undone!')) {
+            $.ajax({
+                type: "POST",
+                url: "{% url 'delete_report' 999999 %}".replace('999999', reportId),
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                },
+                success: function(response) {
+                    if (response.deleted) {
+                        $('#message-container').html('<div class="alert alert-success">Report deleted successfully.</div>');
+                        setTimeout(function() {  // Auto-clear message after 3 seconds
+                            $('#message-container').fadeOut();
+                        }, 3000);
+                        $('#report-row-' + reportId).fadeOut(1000, function() { $(this).remove(); }); // Fade out and remove the row
+                    }
+                },
+                error: function(xhr, status, error) {
+                    $('#message-container').html('<div class="alert alert-danger">Error deleting report: ' + xhr.statusText + '</div>');
+                    setTimeout(function() {  // Auto-clear message after 3 seconds
+                        $('#message-container').fadeOut();
+                    }, 3000);
+                }
+            });
+        }
+    });
 </script>
 </body>
 </html>
