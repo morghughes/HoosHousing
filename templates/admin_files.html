@@ -70,12 +70,12 @@
                                 </thead>
                                 <tbody>
                                 {% for report in all_reports %}
-                                    <tr>
+                                    <tr class="centered">
                                         <td class="title-column" onclick="toggleExpansion(this)">
                                             {{ report.report_title }}
                                             <i class="fas fa-chevron-down"></i>
                                         </td>
-                                        <td class="centered"><a href="{% url 'report_detail' report.id %}">{{ report.id }}</a></td>
+                                        <td><a href="{% url 'report_detail' report.id %}">{{ report.id }}</a></td>
                                         <td>{{ report.report_user }}</td>
                                         <td>{{ report.report_location }}</td>
                                         <td>
@@ -86,7 +86,7 @@
                                                 {% endif %}
                                             " disabled>{{ report.report_status }}</button>
                                         </td>
-                                        <td class="centered">{{ report.upvotes }}</td>
+                                        <td>{{ report.upvotes }}</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
