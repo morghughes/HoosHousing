@@ -1,9 +1,10 @@
+{% extends 'base.html' %}
 {% load static %}
 {% load i18n %}
-
 <!DOCTYPE html>
-<html lang="en">
-<head>
+{#<html lang="en">#}
+{#<head>#}
+{% block head %}
     <meta charset="UTF-8">
     <title>Report Submissions</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -11,6 +12,7 @@
     <style>
         body {
             background-color: #2b5fc8;
+            margin: 0;
         }
         .text-muted { color: gray; }
         .text-primary { color: blue; }
@@ -40,8 +42,11 @@
             transform: translateY(-50%) rotate(180deg); /* Flip arrow when expanded */
         }
     </style>
-</head>
-<body>
+{#</head>#}
+
+{% endblock %}
+{#<body>#}
+{% block content %}
 <div class="container py-5">
     <div class="row justify-content-center">
         {% if user.userprofile.is_site_admin and user.is_authenticated %}
@@ -282,7 +287,7 @@
                 },
                 success: function(response) {
                     if (response.deleted) {
-                        $('#message-container').html('<div class="alert alert-success">Report deleted successfully.</div>');
+                        $('#message-container').html('<div class="alert alert-success">Report deleted successfully.</div>').show();
                         setTimeout(function() {  // Auto-clear message after 3 seconds
                             $('#message-container').fadeOut('slow');
                         }, 3000);
@@ -299,5 +304,6 @@
         }
     });
 </script>
-</body>
-</html>
+{% endblock %}
+{#</body>#}
+{#</html>#}

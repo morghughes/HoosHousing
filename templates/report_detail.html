@@ -1,9 +1,11 @@
+{% extends 'base.html' %}
 {% load static %}
 {% load i18n %}
 
 <!DOCTYPE html>
-<html>
-<head>
+{#<html>#}
+{#<head>#}
+{% block head %}
     <meta charset="utf-8">
     <title>Report Detail</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -12,20 +14,31 @@
             background-color: #2b5fc8;
         }
     </style>
-</head>
-<body>
+{#</head>#}
+{% endblock %}
+
+{% block content %}
 <div class="container py-5">
-    {% if messages %}
-        <div id="message-container">
-            {% for message in messages %}
-                {% if 'resolution_update' in message.tags %}
-                    <div class="alert alert-success text-center {{ message.tags }}">{{ message }}</div>
-                {% endif %}
-            {% endfor %}
-        </div>
-    {% endif %}
+{#    {% if messages %}#}
+{#        <div id="message-container">#}
+{#            {% for message in messages %}#}
+{#                {% if 'resolution_update' in message.tags %}#}
+{#                    <div class="alert alert-success text-center {{ message.tags }}">{{ message }}</div>#}
+{#                {% endif %}#}
+{#            {% endfor %}#}
+{#        </div>#}
+{#    {% endif %}#}
     <div class="row justify-content-center">
         <div class="col-md-8 mb-4">
+            {% if messages %}
+                <div id="message-container">
+                    {% for message in messages %}
+                        {% if 'resolution_update' in message.tags %}
+                            <div class="alert alert-success text-center {{ message.tags }}">{{ message }}</div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
             <div class="card">
 {#                <div class="card-header">#}
                 <div class="card-header d-flex justify-content-between align-items-center">
@@ -104,5 +117,6 @@
         }, 5000);
     });
 </script>
-</body>
-</html>
+{#</body>#}
+{#</html>#}
+{% endblock %}

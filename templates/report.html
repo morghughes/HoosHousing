@@ -1,18 +1,25 @@
+{% extends 'base.html' %}
 {% load i18n %}
 
 <!DOCTYPE html>
-<html>
-<head>
+{#<html>#}
+{% block head %}
   <meta charset="utf-8">
   <title>{% trans "Report Form" %}</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <style>
     body {
       background-color: #2b5fc8;
+      height: 100%;
+      margin: 0;
     }
     .container {
-      padding-top: 20px;
-      padding-left:0;
+      {#padding-top: 20px;#}
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      {#padding-left:0;#}
+      flex-grow: 1;
     }
     .card {
       margin: auto;
@@ -23,8 +30,9 @@
         font-size: 0.9rem;
     }
   </style>
-</head>
-<body>
+{% endblock %}
+
+{% block content %}
   <div class="container">
     <div class="row">
       <div class="col-md-8 offset-md-2">
@@ -116,8 +124,8 @@
           }, 7000);
       });
   </script>
-</body>
-</html>
+{% endblock %}
+{#</html>#}
 
 
 
