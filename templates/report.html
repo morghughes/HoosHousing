@@ -12,6 +12,7 @@
     }
     .container {
       padding-top: 20px;
+      padding-left:0;
     }
     .card {
       margin: auto;
@@ -87,7 +88,14 @@
                     <label for="public_files" class="checkbox-label">{% trans "Make files public?" %}</label>
                 </div>
 
-              <button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
+                <div class="form-group row">
+                    <div class="col-sm-6">
+                        <button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
+                    </div>
+                    <div class="col-sm-6 text-right">
+                        <a href="{% url 'home' %}" class="btn btn-danger" role="button">Cancel</a>
+                    </div>
+                </div>
             </form>
           </div>
         </div>

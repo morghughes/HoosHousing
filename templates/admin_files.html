@@ -61,7 +61,7 @@
                                 <thead>
                                 <tr class="centered">
                                     <th>Title</th>
-                                    <th>Report ID</th>
+                                    <th>ID</th>
                                     <th>Uploader</th>
                                     <th>Location</th>
                                     <th>Status</th>
@@ -75,7 +75,7 @@
                                             {{ report.report_title }}
                                             <i class="fas fa-chevron-down"></i>
                                         </td>
-                                        <td><a href="{% url 'report_detail' report.id %}">{{ report.id }}</a></td>
+                                        <td class="centered"><a href="{% url 'report_detail' report.id %}">{{ report.id }}</a></td>
                                         <td>{{ report.report_user }}</td>
                                         <td>{{ report.report_location }}</td>
                                         <td>
@@ -94,7 +94,7 @@
 {#                                                <span id="upvote-count-{{ report.id }}">{{ report.upvotes }}</span>#}
 {#                                            </a>#}
                                         </td>
-                                        <td>{{ report.upvotes }}</td>
+                                        <td class="centered">{{ report.upvotes }}</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
@@ -145,14 +145,6 @@
                                             </td>
                                             <td>
                                                 {{ report.upvotes }}
-{#                                                <a href="#" class="upvote-btn" data-report-id="{{ report.id }}">#}
-{#                                                {% if request.user in report.upvoters.all %}#}
-{#                                                    <i class="fas fa-thumbs-up text-primary" aria-hidden="true"></i>#}
-{#                                                {% else %}#}
-{#                                                    <i class="fas fa-thumbs-up text-muted" aria-hidden="true"></i>#}
-{#                                                {% endif %}#}
-{#                                                <span id="upvote-count-{{ report.id }}">{{ report.upvotes }}</span>#}
-{#                                                </a>#}
                                             </td>
                                         </tr>
                                     {% endfor %}
