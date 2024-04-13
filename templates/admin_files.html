@@ -14,6 +14,31 @@
         }
         .text-muted { color: gray; }
         .text-primary { color: blue; }
+        .centered {
+            text-align: center;
+        }
+        .title-column {
+            max-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            cursor: pointer;
+            position: relative;
+            padding-right: 20px;
+        }
+        .title-column.expanded {
+            max-width: 200px; /* Remove max width when expanded */
+            white-space: normal; /* Allow text wrapping */
+        }
+        .title-column i {
+            position: absolute;
+            right: 0px; /* Position icon at the end of the title area */
+            top: 50%; /* Center vertically */
+            transform: translateY(-50%); /* Adjust to perfectly center */
+        }
+        .title-column.expanded i {
+            transform: translateY(-50%) rotate(180deg); /* Flip arrow when expanded */
+        }
     </style>
 </head>
 <body>
@@ -34,11 +59,11 @@
                         <div class="table-responsive">
                             <table class="table">
                                 <thead>
-                                <tr>
+                                <tr class="centered">
+                                    <th>Title</th>
                                     <th>Report ID</th>
                                     <th>Uploader</th>
                                     <th>Location</th>
-                                    <th>Title</th>
                                     <th>Status</th>
                                     <th>Upvotes</th>
                                 </tr>
@@ -46,10 +71,13 @@
                                 <tbody>
                                 {% for report in all_reports %}
                                     <tr>
+                                        <td class="title-column" onclick="toggleExpansion(this)">
+                                            {{ report.report_title }}
+                                            <i class="fas fa-chevron-down"></i>
+                                        </td>
                                         <td><a href="{% url 'report_detail' report.id %}">{{ report.id }}</a></td>
                                         <td>{{ report.report_user }}</td>
                                         <td>{{ report.report_location }}</td>
-                                        <td>{{ report.report_title }}</td>
                                         <td>
                                             <button class="btn
                                                 {% if report.report_status == 'New' %}btn-primary
@@ -90,20 +118,23 @@
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead>
-                                    <tr>
-                                        <th>Report ID</th>
-                                        <th>Location</th>
+                                    <tr class="centered">
                                         <th>Title</th>
+                                        <th>ID</th>
+                                        <th>Location</th>
                                         <th>Status</th>
-                                        <th>Upvote?</th>
+                                        <th>Upvotes</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     {% for report in user_reports %}
-                                        <tr>
+                                        <tr class="centered">
+                                            <td class="title-column" onclick="toggleExpansion(this)">
+                                                {{ report.report_title }}
+                                                <i class="fas fa-chevron-down"></i>
+                                            </td>
                                             <td><a href="{% url 'report_detail' report.id %}">{{ report.id }}</a></td>
                                             <td>{{ report.report_location }}</td>
-                                            <td>{{ report.report_title }}</td>
                                             <td>
                                                 <button class="btn
                                             {% if report.report_status == 'New' %}btn-primary
@@ -113,14 +144,15 @@
                                         " disabled>{{ report.report_status }}</button>
                                             </td>
                                             <td>
-                                                <a href="#" class="upvote-btn" data-report-id="{{ report.id }}">
-                                                {% if request.user in report.upvoters.all %}
-                                                    <i class="fas fa-thumbs-up text-primary" aria-hidden="true"></i>
-                                                {% else %}
-                                                    <i class="fas fa-thumbs-up text-muted" aria-hidden="true"></i>
-                                                {% endif %}
-                                                <span id="upvote-count-{{ report.id }}">{{ report.upvotes }}</span>
-                                                </a>
+                                                {{ report.upvotes }}
+{#                                                <a href="#" class="upvote-btn" data-report-id="{{ report.id }}">#}
+{#                                                {% if request.user in report.upvoters.all %}#}
+{#                                                    <i class="fas fa-thumbs-up text-primary" aria-hidden="true"></i>#}
+{#                                                {% else %}#}
+{#                                                    <i class="fas fa-thumbs-up text-muted" aria-hidden="true"></i>#}
+{#                                                {% endif %}#}
+{#                                                <span id="upvote-count-{{ report.id }}">{{ report.upvotes }}</span>#}
+{#                                                </a>#}
                                             </td>
                                         </tr>
                                     {% endfor %}
@@ -141,10 +173,10 @@
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead>
-                                    <tr>
-                                        <th>Report ID</th>
-                                        <th>Location</th>
+                                    <tr class="centered">
                                         <th>Title</th>
+                                        <th>ID</th>
+                                        <th>Location</th>
                                         <th>Status</th>
                                         <th>Upvote?</th>
                                     </tr>
@@ -152,14 +184,17 @@
                                     <tbody>
                                     {% for report in all_reports %}
                                         {% if report not in user_reports and report.is_public%}
-                                            <tr>
+                                            <tr class="centered">
+                                                <td class="title-column" onclick="toggleExpansion(this)">
+                                                    {{ report.report_title }}
+                                                    <i class="fas fa-chevron-down"></i>
+                                                </td>
                                                 {% if not report.public_description and not report.public_files %}
                                                     <td>{{ report.id }}</td>
                                                 {% else %}
                                                 <td><a href="{% url 'report_detail' report.id %}">{{ report.id }}</a></td>
                                                 {% endif %}
                                                 <td>{{ report.report_location }}</td>
-                                                <td>{{ report.report_title }}</td>
                                                 <td>
                                                     <button class="btn
                                                         {% if report.report_status == 'New' %}btn-primary
@@ -227,6 +262,11 @@
             });
         });
     });
+</script>
+<script>
+    function toggleExpansion(element) {
+        element.classList.toggle('expanded');
+    }
 </script>
 </body>
 </html>
