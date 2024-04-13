@@ -153,10 +153,13 @@ def submit(request):
             'public_files': request.POST.get('public_files') == 'on',
         })
 
-        if not context['comment'] or not context['location'] or not context['title'] or not request.FILES.getlist('files'):
-            messages.error(request, "Please ensure all fields not marked 'Optional' are answered. You are not required to fill any checkboxes.", extra_tags='form_error')
+        if not context['comment'] or not context['location'] or not context['title']:
+            messages.error(request, "Please ensure all fields not noted as 'Optional' are answered. You are not required to select any checkboxes.", extra_tags='form_error')
         elif not context['is_public'] and (context['public_description'] or context['public_files']):
-            messages.error(request, "You cannot share description or files if the overall privacy is still private.", extra_tags='form_error')
+            messages.error(request, "You cannot share your description and/or files if the overall privacy is still private.", extra_tags='form_error')
+        elif not request.FILES.getlist('files') and context['public_files']:
+            messages.error(request, "If you would like you would like to make your files public to other non-admin users, please select a file or files to upload.", extra_tags='form_error')
+
         else:
             similar_reports = Report.objects.filter(
                Q(report_type=context['type']) & Q(report_location=context['location']) & ~Q(report_status='Complete') & Q(is_public=True)

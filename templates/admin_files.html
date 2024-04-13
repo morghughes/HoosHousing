@@ -284,7 +284,7 @@
                     if (response.deleted) {
                         $('#message-container').html('<div class="alert alert-success">Report deleted successfully.</div>');
                         setTimeout(function() {  // Auto-clear message after 3 seconds
-                            $('#message-container').fadeOut();
+                            $('#message-container').fadeOut('slow');
                         }, 3000);
                         $('#report-row-' + reportId).fadeOut(1000, function() { $(this).remove(); }); // Fade out and remove the row
                     }
@@ -292,7 +292,7 @@
                 error: function(xhr, status, error) {
                     $('#message-container').html('<div class="alert alert-danger">Error deleting report: ' + xhr.statusText + '</div>');
                     setTimeout(function() {  // Auto-clear message after 3 seconds
-                        $('#message-container').fadeOut();
+                        $('#message-container').fadeOut('slow');
                     }, 3000);
                 }
             });

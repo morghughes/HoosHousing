@@ -19,7 +19,7 @@
         <div id="message-container">
             {% for message in messages %}
                 {% if 'resolution_update' in message.tags %}
-                    <div class="alert alert-success {{ message.tags }}">{{ message }}</div>
+                    <div class="alert alert-success text-center {{ message.tags }}">{{ message }}</div>
                 {% endif %}
             {% endfor %}
         </div>
@@ -101,7 +101,7 @@
         // Fade out messages after 3 seconds
         setTimeout(function() {
             $('#message-container').fadeOut('slow');
-        }, 3000);
+        }, 5000);
     });
 </script>
 </body>
