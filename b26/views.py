@@ -195,9 +195,19 @@ def submit(request):
     return render(request, "report.html", context)
 
 def upvote_report(request, report_id):
+    if not request.user.is_authenticated:
+        return JsonResponse({'error': 'Authentication required'}, status=401)
+
     report = get_object_or_404(Report, id=report_id)
-    report.upvotes += 1
+    if request.user in report.upvoters.all():
+        report.upvotes -= 1
+        report.upvoters.remove(request.user)
+    else:
+        report.upvotes += 1
+        report.upvoters.add(request.user)
+
+
     report.save()
-    return redirect('view_reports')
+    return JsonResponse({'upvotes': report.upvotes, 'upvoted': request.user in report.upvoters.all()})
     # new_upvote_count = report.upvotes 
     # return JsonResponse({'upvotes': new_upvote_count})

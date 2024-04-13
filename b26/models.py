@@ -25,6 +25,7 @@ class Report(models.Model):
     report_title = models.CharField(max_length=60, default='')
     upvotes = models.IntegerField(default=0)
 
+    upvoters = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='upvoted_reports')
 
     LOCATION_POSSIBILITIES = [
         ("Balz-Dobie", "Balz-Dobie"), ("Cauthen", "Cauthen"), ("Gibbons", "Gibbons"), ("Kellogg", "Kellogg"),

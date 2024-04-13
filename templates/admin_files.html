@@ -12,6 +12,8 @@
         body {
             background-color: #2b5fc8;
         }
+        .text-muted { color: gray; }
+        .text-primary { color: blue; }
     </style>
 </head>
 <body>
@@ -38,6 +40,7 @@
                                     <th>Location</th>
                                     <th>Title</th>
                                     <th>Status</th>
+                                    <th>Upvotes</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -54,11 +57,16 @@
                                                 {% elif report.report_status == 'Complete' %}btn-success
                                                 {% endif %}
                                             " disabled>{{ report.report_status }}</button>
-                                            <a href="#" class="upvote-btn" data-report-id="{{ report.id }}">
-                                                <i class="fas fa-thumbs-up" aria-hidden="true"></i>
-                                                <span id="upvote-count-{{ report.id }}">{{ report.upvotes }}</span>
-                                            </a>
+{#                                            <a href="#" class="upvote-btn" data-report-id="{{ report.id }}">#}
+{#                                                {% if request.user in report.upvoters.all %}#}
+{#                                                    <i class="fas fa-thumbs-up text-primary" aria-hidden="true"></i>#}
+{#                                                {% else %}#}
+{#                                                    <i class="fas fa-thumbs-up text-muted" aria-hidden="true"></i>#}
+{#                                                {% endif %}#}
+{#                                                <span id="upvote-count-{{ report.id }}">{{ report.upvotes }}</span>#}
+{#                                            </a>#}
                                         </td>
+                                        <td>{{ report.upvotes }}</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
@@ -87,6 +95,7 @@
                                         <th>Location</th>
                                         <th>Title</th>
                                         <th>Status</th>
+                                        <th>Upvote?</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -102,10 +111,16 @@
                                             {% elif report.report_status == 'Complete' %}btn-success
                                             {% endif %}
                                         " disabled>{{ report.report_status }}</button>
-                                        <a href="#" class="upvote-btn" data-report-id="{{ report.id }}">
-                                            <i class="fas fa-thumbs-up" aria-hidden="true"></i>
-                                            <span id="upvote-count-{{ report.id }}">{{ report.upvotes }}</span>
-                                        </a>
+                                            </td>
+                                            <td>
+                                                <a href="#" class="upvote-btn" data-report-id="{{ report.id }}">
+                                                {% if request.user in report.upvoters.all %}
+                                                    <i class="fas fa-thumbs-up text-primary" aria-hidden="true"></i>
+                                                {% else %}
+                                                    <i class="fas fa-thumbs-up text-muted" aria-hidden="true"></i>
+                                                {% endif %}
+                                                <span id="upvote-count-{{ report.id }}">{{ report.upvotes }}</span>
+                                                </a>
                                             </td>
                                         </tr>
                                     {% endfor %}
@@ -131,6 +146,7 @@
                                         <th>Location</th>
                                         <th>Title</th>
                                         <th>Status</th>
+                                        <th>Upvote?</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -152,8 +168,14 @@
                                                         {% endif %}
                                                     " disabled>{{ report.report_status }}
                                                     </button>
+                                                </td>
+                                                <td>
                                                     <a href="#" class="upvote-btn" data-report-id="{{ report.id }}">
-                                                        <i class="fas fa-thumbs-up" aria-hidden="true"></i>
+                                                        {% if request.user in report.upvoters.all %}
+                                                            <i class="fas fa-thumbs-up text-primary" aria-hidden="true"></i>
+                                                        {% else %}
+                                                            <i class="fas fa-thumbs-up text-muted" aria-hidden="true"></i>
+                                                        {% endif %}
                                                         <span id="upvote-count-{{ report.id }}">{{ report.upvotes }}</span>
                                                     </a>
                                                 </td>
@@ -176,25 +198,35 @@
 </div>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script>
-$(document).ready(function() {
-    $('.upvote-btn').on('click', function(e) {
-        e.preventDefault();
-        var reportId = $(this).data('report-id');
-        $.ajax({
-            type: "POST",
-            url: "{% url 'upvote_report' 999999 %}".replace('999999', reportId),
-            data: {
-                csrfmiddlewaretoken: '{{ csrf_token }}',
-            },
-            success: function(data) {
-                $('#upvote-count-' + reportId).text(data.upvotes);
-            },
-            error: function(xhr, status, error) {
-                console.log("Error upvoting report: " + error);
-            }
+    $(document).ready(function() {
+        $('.upvote-btn').on('click', function(e) {
+            e.preventDefault();
+            var reportId = $(this).data('report-id');
+            var $this = $(this);
+            $.ajax({
+                type: "POST",
+                url: "{% url 'upvote_report' 999999 %}".replace('999999', reportId),
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                },
+                success: function(response) {
+                    if (response.upvotes !== undefined) {
+                        $('#upvote-count-' + reportId).text(response.upvotes);
+                        if (response.upvoted) {
+                            $this.find('i').addClass('text-primary').removeClass('text-muted');
+                        } else {
+                            $this.find('i').removeClass('text-primary').addClass('text-muted');
+                        }
+                    } else if (response.error) {
+                        console.log(response.error);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.log("Error upvoting report: " + error);
+                }
+            });
         });
     });
-});
 </script>
 </body>
 </html>
