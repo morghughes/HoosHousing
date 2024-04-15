@@ -143,7 +143,13 @@
 
             <form class="login" method="POST" action="{% url 'account_login' %}">
               {% csrf_token %}
-              {{ form.non_field_errors }}
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {% for error in form.non_field_errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
               <div class="form-group">
                 <label for="{{ form.login.id_for_label }}">{{ form.login.label }}:</label>
                 {{ form.login }}
@@ -194,5 +200,14 @@
       </div>
     </div>
   </div>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script>
+      $(document).ready(function() {
+          // Messages disappear in 5 seconds
+          setTimeout(function() {
+              $(".alert").fadeOut('slow');
+          }, 5000);
+      });
+  </script>
 </body>
 </html>
