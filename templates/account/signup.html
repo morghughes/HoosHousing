@@ -139,6 +139,16 @@
            <form method="POST" action="{% url 'account_signup' %}">
              {% csrf_token %}
              {{ form.as_p }}
+               <p>
+                   <label for="id_first_name">{% trans "First Name" %} (optional):</label>
+                   <input type="text" name="first_name" id="id_first_name" maxlength="20"
+                          placeholder="{% trans 'First name' %}" autocomplete="given-name">
+               </p>
+               <p>
+                   <label for="id_last_name">{% trans "Last Name" %} (optional):</label>
+                   <input type="text" name="last_name" id="id_last_name" maxlength="20"
+                          placeholder="{% trans 'Last name' %}" autocomplete="family-name">
+               </p>
              <button type="submit" class="btn btn-primary">{% trans "Sign Up" %}</button>
            </form>
            <hr>
