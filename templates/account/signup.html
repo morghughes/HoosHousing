@@ -131,26 +131,63 @@
  <div class="container">
    <div class="row justify-content-center">
      <div class="col-md-6">
+         {% if form.non_field_errors %}
+             <div class="alert alert-danger" role="alert">
+                 {% for error in form.non_field_errors %}
+                     {{ error }}
+                 {% endfor %}
+             </div>
+         {% endif %}
        <div class="card">
          <div class="card-header">
            <h4 class="card-title">{% trans "Sign Up" %}</h4>
          </div>
          <div class="card-body">
-           <form method="POST" action="{% url 'account_signup' %}">
-             {% csrf_token %}
-             {{ form.as_p }}
-               <p>
-                   <label for="id_first_name">{% trans "First Name" %} (optional):</label>
-                   <input type="text" name="first_name" id="id_first_name" maxlength="20"
-                          placeholder="{% trans 'First name' %}" autocomplete="given-name">
-               </p>
-               <p>
-                   <label for="id_last_name">{% trans "Last Name" %} (optional):</label>
-                   <input type="text" name="last_name" id="id_last_name" maxlength="20"
-                          placeholder="{% trans 'Last name' %}" autocomplete="family-name">
-               </p>
-             <button type="submit" class="btn btn-primary">{% trans "Sign Up" %}</button>
-           </form>
+             <form method="POST" action="{% url 'account_signup' %}">
+                 {% csrf_token %}
+                 {% for field in form %}
+                     <div class="form-group">
+                         {{ field.label_tag }}
+                         {{ field }}
+                         {% if field.help_text %}
+                             <small class="form-text text-muted">{{ field.help_text }}</small>
+                         {% endif %}
+                         {% if field.errors %}
+                             <div class="alert alert-danger" role="alert">
+                                 {% for error in field.errors %}
+                                     <p>{{ error }}</p>
+                                 {% endfor %}
+                             </div>
+                         {% endif %}
+                     </div>
+                 {% endfor %}
+                 <p>
+                     <label for="id_first_name">{% trans "First Name" %} (optional):</label>
+                     <input type="text" name="first_name" id="id_first_name" maxlength="20"
+                            placeholder="{% trans 'First name' %}" autocomplete="given-name">
+                 </p>
+                 <p>
+                     <label for="id_last_name">{% trans "Last Name" %} (optional):</label>
+                     <input type="text" name="last_name" id="id_last_name" maxlength="20"
+                            placeholder="{% trans 'Last name' %}" autocomplete="family-name">
+                 </p>
+                 <button type="submit" class="btn btn-primary">{% trans "Sign Up" %}</button>
+             </form>
+{#           <form method="POST" action="{% url 'account_signup' %}">#}
+{#             {% csrf_token %}#}
+{#             {{ form.as_p }}#}
+{#               <p>#}
+{#                   <label for="id_first_name">{% trans "First Name" %} (optional):</label>#}
+{#                   <input type="text" name="first_name" id="id_first_name" maxlength="20"#}
+{#                          placeholder="{% trans 'First name' %}" autocomplete="given-name">#}
+{#               </p>#}
+{#               <p>#}
+{#                   <label for="id_last_name">{% trans "Last Name" %} (optional):</label>#}
+{#                   <input type="text" name="last_name" id="id_last_name" maxlength="20"#}
+{#                          placeholder="{% trans 'Last name' %}" autocomplete="family-name">#}
+{#               </p>#}
+{#             <button type="submit" class="btn btn-primary">{% trans "Sign Up" %}</button>#}
+{#           </form>#}
            <hr>
            <p>{% trans "Already have an account?" %} <a href="{% url 'account_login' %}">{% trans "Sign in" %}</a></p>
 
@@ -187,9 +224,17 @@
      </div>
    </div>
  </div>
- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+ <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>
  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+ <script>
+     $(document).ready(function() {
+         // Messages disappear in 5 seconds
+         setTimeout(function() {
+             $(".alert").fadeOut('slow');
+         }, 5000);
+     });
+ </script>
 </body>
 </html>
 
