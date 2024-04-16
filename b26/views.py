@@ -34,6 +34,8 @@ def index(request):
 
     return render(request, 'index.html', context)
 
+def welcome_view(request):
+    return render(request, 'welcome.html')
 
 class ReportView(generic.DetailView):
     model = Report
