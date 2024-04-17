@@ -45,20 +45,17 @@
             width: 100%;
         }
     </style>
-{#</head>#}
-
 {% endblock %}
-{#<body>#}
+
 {% block content %}
 <div class="container py-5">
     <div class="row justify-content-center">
         {% if user.userprofile.is_site_admin and user.is_authenticated %}
             <!-- Card for Site Admins Showing All Reports -->
             <div class="col-md-10">
-                <form action="{% url 'logout' %}" method="post" class="mb-3">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-danger">Logout</button>
-                </form>
+                <div class="mb-3">
+                    <a href="{% url 'welcome' %}" class="btn btn-secondary">Back to Home</a>
+                </div>
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">All Submissions</h4>
@@ -133,7 +130,7 @@
                         {% endif %}
                     </div>
                     <div class="mb-3">
-                        <a href="{% url 'home' %}" class="btn btn-secondary">Back to Home</a>
+                        <a href="{% url 'welcome' %}" class="btn btn-secondary">Back to Home</a>
                     </div>
                     <div class="card">
                         <div class="card-header">
@@ -321,5 +318,3 @@
     });
 </script>
 {% endblock %}
-{#</body>#}
-{#</html>#}

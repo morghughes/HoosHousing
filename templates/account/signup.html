@@ -48,7 +48,7 @@
        width: auto;
        max-width: 400px;
        min-width: min-content;
-       margin-bottom: 20px;
+       margin-bottom: 0px;
    }
 
    .gsi-material-button .gsi-material-button-icon {
@@ -131,6 +131,9 @@
  <div class="container">
    <div class="row justify-content-center">
      <div class="col-md-6">
+         <div class="mb-3">
+             <a href="{% url 'welcome' %}" class="btn btn-secondary">Back to Home</a>
+         </div>
          {% if form.non_field_errors %}
              <div class="alert alert-danger" role="alert">
                  {% for error in form.non_field_errors %}

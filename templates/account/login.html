@@ -129,6 +129,9 @@
   <div class="container py-5">
     <div class="row justify-content-center">
       <div class="col-md-6">
+          <div class="mb-3">
+              <a href="{% url 'welcome' %}" class="btn btn-secondary">Back to Home</a>
+          </div>
         <div class="card">
           <div class="card-header">
             <h4 class="card-title">{% trans "Sign In" %}</h4>
@@ -193,8 +196,6 @@
                     {% endif %}
                 {% endfor %}
             {% endif %}
-
-              <p>Alternatively, you may opt to <a href="{% url 'report' %}">submit an anonymous report</a>. However, be aware that you will not be able to view the status of your report after submission.</p>
           </div>
         </div>
       </div>

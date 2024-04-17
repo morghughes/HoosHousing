@@ -47,7 +47,11 @@
           {% endif %}
         <div class="card">
           <div class="card-header">
-            <h4 class="card-title">{% trans "Report Form" %}</h4>
+              {% if user.is_authenticated %}
+                <h4 class="card-title">{% trans "Report Form" %}</h4>
+              {% else %}
+              <h4 class="card-title">{% trans "Anonymous Report Form"%}</h4>
+              {% endif %}
           </div>
           <div class="card-body">
             <form action="{% url 'submit' %}" method="post" enctype="multipart/form-data">
@@ -107,7 +111,7 @@
                         <button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
                     </div>
                     <div class="col-sm-6 text-right">
-                        <a href="{% url 'home' %}" class="btn btn-danger" role="button">Cancel</a>
+                        <a href="{% url 'welcome' %}" class="btn btn-danger" role="button">Cancel</a>
                     </div>
                 </div>
             </form>

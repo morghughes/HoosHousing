@@ -1,9 +1,11 @@
+{% extends 'base.html' %}
 {% load i18n %}
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en">
-<head>
+{#<html lang="en">#}
+{#<head>#}
+{% block head %}
     <meta charset="utf-8">
     <title>{% trans "Welcome to the UVA Housing Whistleblower Application" %}</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -39,15 +41,31 @@
         header p {
             font-size: 1.2rem;
         }
+        .welcome-text {
+            font-size: 1.0rem;
+            color: lightgray;
+        }
         .btn-main {
             background-color: var(--button-bg-color);
             color: white;
             border: 2px solid var(--button-bg-color);
             padding: 0.7rem 1.5rem;
+            margin: 10px;
         }
         .btn-main:hover {
             background-color: var(--button-hover-bg-color);
             border-color: var(--button-hover-bg-color);
+        }
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+            border: 2px solid #dc3545;
+            padding: 0.7rem 1.5rem;
+            margin-top: 10px;
+        }
+        .btn-danger:hover {
+            background-color: #a71d2a;
+            border-color: #9a1c28;
         }
         article {
             background: white;
@@ -61,28 +79,58 @@
             color: var(--button-bg-color);
             margin-bottom: 1rem;
         }
-        footer {
-            text-align: center;
-            padding: 15px;
-            margin-top: 40px;
-            color: var(--main-text-color);
-            background: #e9ecef;
-            border-radius: 0.2rem;
-        }
-        footer:hover {
-            background-color: #cbd3da;
-        }
+        {#footer {#}
+        {#    text-align: center;#}
+        {#    padding: 15px;#}
+        {#    margin-top: 40px;#}
+        {#    color: var(--main-text-color);#}
+        {#    background: #e9ecef;#}
+        {#    border-radius: 0.2rem;#}
+        {#}#}
+        {#footer:hover {#}
+        {#    background-color: #cbd3da;#}
+        {#}#}
     </style>
-</head>
-<body>
+{#</head>#}
+{% endblock %}
+
+{% block content %}
+{#<body>#}
     <div class="container">
         <header class="text-center">
             <h1>{% trans "Welcome to the UVA Housing Whistleblower Application" %}</h1>
-            <p class="lead">A dedicated platform for reporting issues related to UVA housing.</p>
-            <div>
-                <a href="{% url 'account_login' %}" class="btn btn-main">{% trans "Sign In" %}</a>
-                <a href="{% url 'account_signup' %}" class="btn btn-main">{% trans "Sign Up" %}</a>
-            </div>
+            <p class="lead">A dedicated platform for reporting issues related to UVA housing</p>
+            {% if not user.is_authenticated %}
+                <p class="welcome-text">You are not signed in.</p>
+                <div>
+                    <a href="{% url 'account_login' %}" class="btn btn-main">{% trans "Sign In" %}</a>
+                    <a href="{% url 'account_signup' %}" class="btn btn-main">{% trans "Sign Up" %}</a>
+                </div>
+                <p class="welcome-text">OR</p>
+                <div>
+                    <a href="{% url 'report' %}" class="btn btn-main">{% trans "Create Anonymous Report" %}</a>
+                </div>
+            {% else %}
+                <p class="welcome-text">Welcome, {% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %}!</p>
+                {% if user.userprofile.is_site_admin %}
+                    <p class="welcome-text">*Site Admin*</p>
+                {% endif %}
+                <div>
+                    {% if not user.userprofile.is_site_admin %}
+                        <a href="{% url 'report' %}" class="btn btn-main">Create Report</a>
+                        <a href="{% url 'view_reports' %}" class="btn btn-main">View Reports</a>
+                    {% else %}
+                        <a href="{% url 'view_reports' %}" class="btn btn-main">Manage Reports</a>
+                    {% endif %}
+
+                </div>
+                <div>
+                    <form action="{% url 'logout' %}" method="post" class="mb-3">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Logout</button>
+                    </form>
+                </div>
+            {% endif %}
         </header>
         <article>
             <h2>{% trans "Complaint Categories" %}</h2>
@@ -97,9 +145,10 @@
             <h2>{% trans "Purpose of This Application" %}</h2>
             <p>{% trans "This application is designed to provide UVA students a way to submit complaints and issues they encounter within UVA on-grounds housing. " %}</p>
         </article>
-        <footer>
-            <p>{% trans "This application is for a UVA class. Please don't enter confidential information." %}</p>
-        </footer>
+{#        <footer>#}
+{#            <p>{% trans "This application is for a UVA class. Please don't enter confidential information." %}</p>#}
+{#        </footer>#}
     </div>
-</body>
-</html>
+{#</body>#}
+{#</html>#}
+{% endblock %}
