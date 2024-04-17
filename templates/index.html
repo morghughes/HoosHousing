@@ -27,7 +27,7 @@
         {% if user.is_authenticated %}
             <div class="card">
                 <div class="card-header">
-                    <h4>Welcome, {{ request.user.username }}!</h4>
+                    <h4>Welcome, {% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %}!</h4>
                 </div>
                 <div class="card-body">
                     <div> <a href="{% url 'report' %}">Submit a New Report</a> </div>
