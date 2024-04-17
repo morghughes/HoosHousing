@@ -58,7 +58,13 @@
                     <p><strong>ID:</strong> {{ report.id }}</p>
                     <!-- Only shows uploader if site admin -->
                     {% if user.userprofile.is_site_admin and user.is_authenticated %}
-                        <p><strong>Uploader:</strong> {{ report.report_user }}</p>
+                        <p><strong>Uploader:</strong>
+                            {% if report.report_user %}
+                                {{ report.report_user }}
+                            {% else %}
+                                <span class="text-danger">Anonymous</span>
+                            {% endif %}
+                        </p>
                     {% endif %}
                     <!-- Shows status, location, and title to all users, but won't be visible if the report is private since option to expand into this .html doc won't exist -->
                     <p><strong>Status:</strong>
