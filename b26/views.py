@@ -62,6 +62,7 @@ def upload_file(request):
         return JsonResponse({'error': 'No file was given'}, status=400)
 
 
+@login_required
 def update_resolution(request, report_id):
     if not (request.user.is_authenticated and request.user.userprofile.is_site_admin):
         return redirect('some_error_page')
@@ -90,6 +91,7 @@ def mark_report_complete(request, report_id):
     return HttpResponseRedirect(reverse('report_detail', args=[report_id]))
 
 
+@login_required
 def report_detail(request, report_id):
     report = get_object_or_404(Report, pk=report_id)
     if request.user.is_authenticated and request.user.userprofile.is_site_admin:
@@ -99,6 +101,7 @@ def report_detail(request, report_id):
     return render(request, 'report_detail.html', {'report': report})
 
 
+@login_required
 def view_reports(request):
     all_reports = Report.objects.all()
     if not request.user.userprofile.is_site_admin:
@@ -202,6 +205,7 @@ def submit(request):
     return render(request, "report.html", context)
 
 
+@login_required
 def upvote_report(request, report_id):
     if not request.user.is_authenticated:
         return JsonResponse({'error': 'Authentication required'}, status=401)
