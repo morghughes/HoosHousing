@@ -7,11 +7,17 @@
   <meta charset="utf-8">
   <title>{% trans "Report Form" %}</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
-      background-color: #2b5fc8;
+      /*background-color: #2b5fc8;*/
+      background-image: linear-gradient(rgba(251, 130, 8, 0.6), rgba(223, 104, 72, 0.6)), url(https://news.virginia.edu/sites/default/files/uva_sunset_aerial.jpg);
+      background-size: cover;
+      background-position: center top;
+      background-repeat: no-repeat;
       height: 100%;
       margin: 0;
+      font-family: 'Nunito', sans-serif;
     }
     .container {
       {#padding-top: 20px;#}
@@ -28,6 +34,16 @@
     .checkbox-label {
         color: #6c757d;
         font-size: 0.9rem;
+    }
+    h4{
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 2.5rem;
+      color: #232D4B;
+    }
+    label{
+      font-weight: 550;
+      color: #232D4B;
     }
   </style>
 {% endblock %}
