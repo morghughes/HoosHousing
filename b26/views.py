@@ -198,7 +198,10 @@ def submit(request):
             )
 
             for file in request.FILES.getlist('files'):
-                FileUpload.objects.create(data=file, uploader=request.user, report=report)
+                if request.user.is_authenticated:
+                    FileUpload.objects.create(data=file, uploader=request.user, report=report)
+                else:
+                    FileUpload.objects.create(data=file, report=report)
             return HttpResponseRedirect(reverse("submitted"))
         return render(request, "report.html", context)
 
