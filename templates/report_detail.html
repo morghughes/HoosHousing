@@ -116,7 +116,7 @@
                                 {% csrf_token %}
                                 <div class="form-group">
                                     <label for="reportResponse">Resolution Details:</label>
-                                    <textarea class="form-control" id="reportResponse" name="report_response" rows="3">{{ report.report_response }}</textarea>
+                                    <textarea class="form-control" id="reportResponse" name="report_response" rows="3" maxlength="500">{{ report.report_response }}</textarea>
                                 </div>
                                 <button type="submit" class="btn btn-info">Update Resolution</button>
                             </form>
