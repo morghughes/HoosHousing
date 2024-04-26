@@ -56,6 +56,14 @@
         .table-size {
             width: 100%;
         }
+        .btn-main {
+            background-color: #fb8208;
+            border: #fb8208;
+        }
+        .btn-main:hover {
+            background-color: #b0b2b4;
+            border-color: #b0b2b4;
+        }
     </style>
 {% endblock %}
 
@@ -67,7 +75,6 @@
             <div class="col-md-10">
                 <div class="mb-3">
                     <a href="{% url 'welcome' %}" class="btn btn-secondary">Back to Home</a>
-                    <a href="{% url 'report' %}" class="btn btn-main">Create Report</a>
                 </div>
                 <div class="card">
                     <div class="card-header">
@@ -94,7 +101,6 @@
                                             <i class="fas fa-chevron-down"></i>
                                         </td>
                                         <td><a href="{% url 'report_detail' report.id %}">{{ report.id }}</a></td>
-{#                                        <td>{{ report.report_user }}</td>#}
                                         <td>
                                             {% if report.report_user %}
                                                 {{ report.report_user }}
@@ -145,9 +151,11 @@
                     <div class="mb-3">
                         <a href="{% url 'welcome' %}" class="btn btn-secondary">Back to Home</a>
                     </div>
+
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-header d-flex justify-content-between align-items-center">
                             <h4 class="card-title">My Reports</h4>
+                            <a href="{% url 'report' %}" class="btn btn-secondary btn-main">Create Report</a>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -159,6 +167,7 @@
                                         <th>Location</th>
                                         <th>Status</th>
                                         <th>Upvotes</th>
+                                        <th>Delete?</th>
                                     </tr>
                                     </thead>
                                     <tbody>
