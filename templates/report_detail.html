@@ -29,6 +29,7 @@
         font-weight: 550;
         color: #232D4B;
         }
+        .text-muted { color: gray; }
     </style>
 {#</head>#}
 {% endblock %}
@@ -101,9 +102,13 @@
                     <!-- Shows only if public files option was checked -->
                     {% if report.public_files or report.report_user == user.userprofile or user.userprofile.is_site_admin %}
                         <p><strong>Uploaded Files:</strong></p>
-                        {% for file_upload in report.uploads.all %}
-                            <a href="{{ file_upload.data.url }}" target="_blank">{{ file_upload.data.name }}</a><br>
-                        {% endfor %}
+                        {% if report.uploads.all %}
+                            {% for file_upload in report.uploads.all %}
+                                <a href="{{ file_upload.data.url }}" target="_blank">{{ file_upload.data.name }}</a><br>
+                            {% endfor %}
+                        {% else %}
+                            <p class="text-muted">No file uploads</p>
+                        {% endif %}
                     {% endif %}
                     <!-- Shows resolution details only to the uploader, and only if report is complete -->
                     {% if report.report_status == 'Complete' and user.is_authenticated and report.report_user == user.userprofile%}
