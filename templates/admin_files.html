@@ -63,7 +63,7 @@
 <div class="container py-5">
     <div class="row justify-content-center">
         {% if user.userprofile.is_site_admin and user.is_authenticated %}
-            <!-- Card for Site Admins Showing All Reports -->
+
             <div class="col-md-10">
                 <div class="mb-3">
                     <a href="{% url 'welcome' %}" class="btn btn-secondary">Back to Home</a>
@@ -92,9 +92,8 @@
                                         <td class="title-column" onclick="toggleExpansion(this)">
                                             {{ report.report_title }}
                                             <i class="fas fa-chevron-down"></i>
-                                        </td>
-                                        <td><a href="{% url 'report_detail' report.id %}">{{ report.id }}</a></td>
-{#                                        <td>{{ report.report_user }}</td>#}
+                                        <td><a href="{% url 'report_detail' report.id %}" class="btn btn-outline-secondary btn-sm" role="button">{{ report.id }}</a></td>
+                                        <td>{{ report.report_location }}</td>
                                         <td>
                                             {% if report.report_user %}
                                                 {{ report.report_user }}
@@ -128,7 +127,7 @@
             </div>
         {% else %}
             <div class="row justify-content-center">
-                <!-- Card for User's Own Reports -->
+
                 <div class="col-md-10 mb-4">
                     <div id="message-container">
                         {% if messages %}
@@ -148,6 +147,7 @@
                     <div class="card">
                         <div class="card-header">
                             <h4 class="card-title">My Reports</h4>
+                            <small> Please click on the ID button to view more details.</small>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -168,7 +168,7 @@
                                                 {{ report.report_title }}
                                                 <i class="fas fa-chevron-down"></i>
                                             </td>
-                                            <td><a href="{% url 'report_detail' report.id %}">{{ report.id }}</a></td>
+                                            <td><a href="{% url 'report_detail' report.id %}" class="btn btn-outline-secondary btn-sm" role="button">{{ report.id }}</a></td>
                                             <td>{{ report.report_location }}</td>
                                             <td>
                                                 <button class="btn
@@ -224,7 +224,7 @@
                                                 {% if not report.public_description and not report.public_files %}
                                                     <td>{{ report.id }}</td>
                                                 {% else %}
-                                                <td><a href="{% url 'report_detail' report.id %}">{{ report.id }}</a></td>
+                                                <td><a href="{% url 'report_detail' report.id %}" class="btn btn-outline-secondary btn-sm" role="button">{{ report.id }}</a></td>
                                                 {% endif %}
                                                 <td>{{ report.report_location }}</td>
                                                 <td>
