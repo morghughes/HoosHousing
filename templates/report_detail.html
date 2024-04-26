@@ -93,6 +93,7 @@
                     </p>
                     <p><strong>Title:</strong> {{ report.report_title }}</p>
                     <p><strong>Location:</strong> {{ report.report_location }}</p>
+                    <p><strong>Type:</strong> {{ report.report_type }}</p>
                     <!-- Shows only if public description option was checked -->
                     {% if report.public_description or report.report_user == user.userprofile or user.userprofile.is_site_admin %}
                         <p><strong>Description:</strong> {{ report.report_comment }}</p>
