@@ -72,6 +72,7 @@
           <div class="card-body">
             <form action="{% url 'submit' %}" method="post" enctype="multipart/form-data">
               {% csrf_token %}
+                <input type="hidden" name="cancel_redirect" value="{{ request.META.HTTP_REFERER|default:request.build_absolute_uri }}">
                 <div class="form-group">
                 <label for="location">{% trans "Where was this?" %}</label>
                 <select class="form-control" id="location" name="location">
@@ -127,7 +128,7 @@
                         <button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
                     </div>
                     <div class="col-sm-6 text-right">
-                        <a href="{% url 'welcome' %}" class="btn btn-danger" role="button">Cancel</a>
+                        <button type="submit" name="action" value="cancel" class="btn btn-danger">{% trans "Cancel" %}</button>
                     </div>
                 </div>
             </form>

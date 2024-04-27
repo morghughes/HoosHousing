@@ -148,6 +148,9 @@ def submit(request):
     }
 
     if request.method == 'POST':
+        if request.POST.get('action') == 'cancel':
+            return HttpResponseRedirect(request.POST.get('cancel_redirect', '/'))
+
         context.update({
             'location': request.POST.get("location", ""),
             'type': request.POST.get("type", ""),
