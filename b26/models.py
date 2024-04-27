@@ -56,12 +56,14 @@ class Report(models.Model):
     NOISE = "Noise"
     MAINTENANCE = "Maintenance"
     SANITATION = "Sanitation"
+    SAFETY = "Safety"
     OTHER = "Other"
 
     TYPE_CHOICES = [
         (NOISE, 'Noise'),
         (MAINTENANCE, 'Maintenance'),
         (SANITATION, 'Sanitation'),
+        (SAFETY, 'Safety'),
         (OTHER, 'Other')
     ]
     report_type = models.CharField(max_length=20, choices=TYPE_CHOICES, null=True, blank=True)
