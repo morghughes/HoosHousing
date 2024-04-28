@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 {% block head %}
     <meta charset="utf-8">
-    <title>{% trans "Welcome to the UVA Housing Whistleblower Application" %}</title>
+    <title>{% trans "Welcome to HoosHousing!" %}</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
     <style>
@@ -88,7 +88,7 @@
 {% block content %}
 <div class="container">
     <header class="text-center">
-        <h1>{% trans "Welcome to the UVA Housing Whistleblower Application" %}</h1>
+        <h1>{% trans "Welcome to HoosHousing!" %}</h1>
         <p class="lead">A dedicated platform for reporting issues related to UVA housing</p>
         {% if not user.is_authenticated %}
             <p class="welcome-text">You are not signed in.</p>
@@ -101,7 +101,9 @@
                 <a href="{% url 'report' %}" class="btn btn-main">{% trans "Create Anonymous Report" %}</a>
             </div>
         {% else %}
-            <p class="welcome-text">Welcome, {% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %}!</p>
+            <p class="welcome-text">Welcome, {% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %}!
+                <a href="{% url 'logout' %}" style="margin-left: 10px;">Sign Out</a>
+            </p>
             {% if user.userprofile.is_site_admin %}
                 <p class="welcome-text">*Site Admin*</p>
             {% endif %}
@@ -112,13 +114,6 @@
                 {% else %}
                     <a href="{% url 'view_reports' %}" class="btn btn-main">Manage Reports</a>
                 {% endif %}
-
-            </div>
-            <div>
-                <form action="{% url 'logout' %}" method="post" class="mb-3">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-danger">Logout</button>
-                </form>
             </div>
         {% endif %}
     </header>
@@ -128,6 +123,7 @@
             <li><strong>{% trans "Noise" %}</strong> - {% trans "Report issues with noise or disruptions." %}</li>
             <li><strong>{% trans "Sanitation" %}</strong> - {% trans "Issues related to cleanliness and sanitation problems." %}</li>
             <li><strong>{% trans "Maintenance" %}</strong> - {% trans "Issues within UVA housing facilities that require UVA staff services." %}</li>
+            <li><strong>{% trans "Safety" %}</strong> - {% trans "Issues that may lead to harm towards yourself or other students." %}</li>
             <li><strong>{% trans "Other" %}</strong> - {% trans "Any other types of issues not specifically categorized." %}</li>
         </ul>
     </article>
