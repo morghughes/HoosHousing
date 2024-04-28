@@ -17,24 +17,6 @@ from django.contrib.messages import constants as message_constants
 from django.http import Http404
 import random
 
-
-@login_required
-def index(request):
-    try:
-        user_profile = UserProfile.objects.get(user=request.user)
-        context = {
-            'user_name': request.user.username,
-            'is_site_admin': user_profile.is_site_admin,
-        }
-    except UserProfile.DoesNotExist:
-        # Handle case where user profile does not exist, if necessary
-        context = {
-            'user_name': request.user.username,
-            'is_site_admin': False,
-        }
-
-    return render(request, 'index.html', context)
-
 def welcome_view(request):
     return render(request, 'welcome.html')
 
