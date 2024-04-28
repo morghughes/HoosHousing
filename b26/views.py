@@ -14,6 +14,7 @@ from django.contrib.auth.views import LoginView
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.contrib.messages import constants as message_constants
+from django.http import Http404
 import random
 
 
@@ -239,13 +240,22 @@ def upvote_report(request, report_id):
 @login_required
 def delete_report(request, report_id):
     if request.method == 'POST':
-        report = get_object_or_404(Report, id=report_id, report_user=request.user.userprofile)
-        # report = get_object_or_404(Report, id=report_id)  # Only for site admins to delete reports for cleanup,
-        # # not for production
         try:
-            report.delete()
-            return JsonResponse({'deleted': True})
-        except Exception as e:
-            return JsonResponse({'deleted': False, 'error': str(e)}, status=500)
-    else:
-        return JsonResponse({'deleted': False, 'error': 'Invalid request'}, status=400)
+            report = Report.objects.get(id=report_id, report_user=request.user.userprofile)
+        except Report.DoesNotExist:
+            return JsonResponse({'error': 'A user may only delete their own reports'}, status=403)
+        report.delete()
+        return JsonResponse({'deleted': True})
+
+    return JsonResponse({'deleted': False, 'error': 'Invalid request'}, status=400)
+    # if request.method == 'POST':
+    #     report = get_object_or_404(Report, id=report_id, report_user=request.user.userprofile)
+    #     # report = get_object_or_404(Report, id=report_id)  # Only for site admins to delete reports for cleanup,
+    #     # # not for production
+    #     try:
+    #         report.delete()
+    #         return JsonResponse({'deleted': True})
+    #     except Exception as e:
+    #         return JsonResponse({'deleted': False, 'error': 'Forbidden'}, status=403)
+    # else:
+    #     return JsonResponse({'deleted': False, 'error': 'Invalid request'}, status=400)
