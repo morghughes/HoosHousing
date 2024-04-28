@@ -188,6 +188,16 @@
             fileText.style.color = 'red';
         }
       }
+
+      if (!localStorage.getItem('referrer')) {
+        localStorage.setItem('referrer', document.referrer || window.location.href);
+      }
+
+      document.getElementById('cancel_redirect').value = localStorage.getItem('referrer');
+
+      window.onbeforeunload = function() {
+          localStorage.removeItem('referrer');
+      };
   </script>
 {% endblock %}
 {#</html>#}
