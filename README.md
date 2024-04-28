@@ -2,7 +2,7 @@
 
 
 ## Description
-HoosHousing is a web application designed to provide a platform for University of Virginia students to submit reports and complaints about occurings in UVA's on-campus housing. It offers an intuitive interface for users to create reports and provide details about the incident, along with status updates and comments regarding their report's resolution. In addition, users can interact with reports from others, if they have been made public, and upvote reports they deem important.
+HoosHousing is a web application designed to provide a platform for University of Virginia students to submit reports and complaints about occurings in UVA's on-campus housing. It offers an intuitive interface for users to create reports and provide details about the incident. Additionally, whistleblowers receive status updates and comments regarding their report's resolution. They can interact with reports from others, if they have been made public, and upvote reports they deem important or urgent.
 
 ## Installation
 ```bash
