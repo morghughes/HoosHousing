@@ -27,7 +27,7 @@
             background: linear-gradient(var(--hero-bg-color), var(--hero-bg-color)) no-repeat center center;
             background-size: cover;
             color: white;
-            padding: 80px 0;
+            padding: 20px 0;
             border-radius: 0.3rem;
             margin-bottom: 40px;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
@@ -76,8 +76,7 @@
             width: 100%;
         }
         .full-page-background {
-            width: 65%;
-            margin: 0 auto;
+            {#width: 65%;#}
             background: linear-gradient(var(--hero-bg-color), var(--hero-bg-color)) no-repeat center center;
             background-size: cover;
             color: white;
@@ -86,7 +85,8 @@
         }
         .full-page-background:first-child {
             padding: 20px 20px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
+            margin-top: 0;
         }
         .subtext {
             font-size: 1.0rem;
@@ -98,6 +98,7 @@
              background-color: #fb8208;;
             color: white;
             border: 2px solid #fb8208;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
             {#padding: 0.7rem 1.5rem;#}
             {#margin: 10px;#}
         }
@@ -120,67 +121,144 @@
 {% endblock %}
 
 {% block content %}
-<div class="full-page-background">
-    <h1>Report Submissions</h1>
-{#    <p class="subtext">To view the details of a public report, click on the ID</p>#}
-</div>
-<div class="full-page-background">
-    <div class="container py-5">
-        <div class="row justify-content-center">
-            {% if user.userprofile.is_site_admin and user.is_authenticated %}
-                <!-- Card for Site Admins Showing All Reports -->
-                <div class="col-md-10">
-                    <div class="mb-3">
-                        <a href="{% url 'welcome' %}" class="btn btn-secondary">Back to Home</a>
+<div class="container py-0">
+    <div class="row justify-content-center">
+        {% if user.userprofile.is_site_admin and user.is_authenticated %}
+            <!-- Card for Site Admins Showing All Reports -->
+            <div class="col-md-10">
+                    <div class="full-page-background">
+                        <h1>Report Submissions</h1>
                     </div>
+            </div>
+            <div class="col-md-10">
+                <div class="mb-3">
+                    <a href="{% url 'welcome' %}" class="btn btn-secondary">Back to Home</a>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">All Submissions</h4>
+                        <small class="subtext"> Click the ID button to view more details</small>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-size">
+                                <thead>
+                                <tr class="centered">
+                                    <th>Title</th>
+                                    <th>ID</th>
+                                    <th>Uploader</th>
+                                    <th>Location</th>
+                                    <th>Status</th>
+                                    <th>Upvotes</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for report in all_reports %}
+                                    <tr class="centered">
+                                        <td class="title-column" onclick="toggleExpansion(this)">
+                                            {{ report.report_title }}
+                                            <i class="fas fa-chevron-down"></i>
+                                        </td>
+                                        <td><a href="{% url 'report_detail' report.id %}" class="btn btn-outline-primary btn-sm" role="button">{{ report.id }}</a></td>
+                                        <td>
+                                            {% if report.report_user %}
+                                                {{ report.report_user }}
+                                            {% else %}
+                                                <span class="text-danger">Anonymous</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ report.report_location }}</td>
+                                        <td>
+                                            <button class="btn
+                                                {% if report.report_status == 'New' %}btn-primary
+                                                {% elif report.report_status == 'In Progress' %}btn-warning
+                                                {% elif report.report_status == 'Complete' %}btn-success
+                                                {% endif %}
+                                            " disabled>{{ report.report_status }}</button>
+                                        </td>
+                                        <td>
+                                            {% if report.report_user %}
+                                                {{ report.upvotes }}
+                                            {% else %}
+                                                <span class="text-danger">N/A</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="row justify-content-center">
+                <!-- Card for User's Own Reports -->
+                <div class="col-md-10">
+                    <div class="full-page-background">
+                        <h1>Report Submissions</h1>
+                    </div>
+                </div>
+                <div class="col-md-10 mb-4">
+                    <div id="message-container">
+                        {% if messages %}
+                            {% for message in messages %}
+                                {% if 'delete_error' in message.tags %}
+                                    <div class="alert alert-danger">{{ message }}</div>
+                                {% endif %}
+                                {% if 'delete_success' in message.tags %}
+                                    <div class="alert alert-success"> {{ message }}</div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="d-flex justify-content-between mb-3">
+                        <a href="{% url 'welcome' %}" class="btn btn-main btn-custom">Back to Home</a>
+                        <a href="{% url 'report' %}" class="btn btn-main btn-custom">Create Report</a>
+                    </div>
+
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">All Submissions</h4>
-                            <small class="subtext"> Click the ID button to view more details</small>
+                            <h4 class="card-title">My Reports</h4>
+                            <small class="subtext"> Click the ID button to view more details </small>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-size">
+                                <table class="table">
                                     <thead>
                                     <tr class="centered">
                                         <th>Title</th>
                                         <th>ID</th>
-                                        <th>Uploader</th>
                                         <th>Location</th>
                                         <th>Status</th>
                                         <th>Upvotes</th>
+                                        <th>Delete?</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {% for report in all_reports %}
-                                        <tr class="centered">
+                                    {% for report in user_reports %}
+                                        <tr class="centered" id="report-row-{{ report.id }}">
                                             <td class="title-column" onclick="toggleExpansion(this)">
                                                 {{ report.report_title }}
                                                 <i class="fas fa-chevron-down"></i>
                                             </td>
-                                            <td><a href="{% url 'report_detail' report.id %}" class="btn btn-outline-primary btn-sm" role="button">{{ report.id }}</a></td>
-                                            <td>
-                                                {% if report.report_user %}
-                                                    {{ report.report_user }}
-                                                {% else %}
-                                                    <span class="text-danger">Anonymous</span>
-                                                {% endif %}
-                                            </td>
+                                             <td><a href="{% url 'report_detail' report.id %}" class="btn btn-outline-primary btn-sm" role="button">{{ report.id }}</a></td>
                                             <td>{{ report.report_location }}</td>
                                             <td>
                                                 <button class="btn
-                                                    {% if report.report_status == 'New' %}btn-primary
-                                                    {% elif report.report_status == 'In Progress' %}btn-warning
-                                                    {% elif report.report_status == 'Complete' %}btn-success
-                                                    {% endif %}
-                                                " disabled>{{ report.report_status }}</button>
+                                            {% if report.report_status == 'New' %}btn-primary
+                                            {% elif report.report_status == 'In Progress' %}btn-warning
+                                            {% elif report.report_status == 'Complete' %}btn-success
+                                            {% endif %}
+                                        " disabled>{{ report.report_status }}</button>
                                             </td>
                                             <td>
-                                                {% if report.report_user %}
-                                                    {{ report.upvotes }}
-                                                {% else %}
-                                                    <span class="text-danger">N/A</span>
-                                                {% endif %}
+                                                {{ report.upvotes }}
+                                            </td>
+                                            <td class="centered">
+                                                <a href="#" class="btn delete-btn" data-report-id="{{ report.id }}" title="Delete Report">
+                                                    <i class="fas fa-times text-danger"></i>
+                                                </a>
                                             </td>
                                         </tr>
                                     {% endfor %}
@@ -190,149 +268,77 @@
                         </div>
                     </div>
                 </div>
-            {% else %}
-                <div class="row justify-content-center">
-                    <!-- Card for User's Own Reports -->
-                    <div class="col-md-10 mb-4">
-                        <div id="message-container">
-                            {% if messages %}
-                                {% for message in messages %}
-                                    {% if 'delete_error' in message.tags %}
-                                        <div class="alert alert-danger">{{ message }}</div>
-                                    {% endif %}
-                                    {% if 'delete_success' in message.tags %}
-                                        <div class="alert alert-success"> {{ message }}</div>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
-                        </div>
-                        <div class="d-flex justify-content-between mb-3">
-                            <a href="{% url 'welcome' %}" class="btn btn-main btn-custom">Back to Home</a>
-                            <a href="{% url 'report' %}" class="btn btn-main">Create Report</a>
-                        </div>
 
-                        <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title">My Reports</h4>
-                                <small class="subtext"> Click the ID button to view more details</small>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <thead>
-                                        <tr class="centered">
-                                            <th>Title</th>
-                                            <th>ID</th>
-                                            <th>Location</th>
-                                            <th>Status</th>
-                                            <th>Upvotes</th>
-                                            <th>Delete?</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {% for report in user_reports %}
-                                            <tr class="centered" id="report-row-{{ report.id }}">
+                <!-- Card for Other Reports -->
+                <div class="col-md-10">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Other Reports</h4>
+                            <small class="subtext"> Click the ID button to view more details</small>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                    <tr class="centered">
+                                        <th>Title</th>
+                                        <th>ID</th>
+                                        <th>Location</th>
+                                        <th>Status</th>
+                                        <th>Upvote?</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for report in all_reports %}
+                                        {% if report not in user_reports and report.is_public%}
+                                            <tr class="centered">
                                                 <td class="title-column" onclick="toggleExpansion(this)">
                                                     {{ report.report_title }}
                                                     <i class="fas fa-chevron-down"></i>
                                                 </td>
-                                                 <td><a href="{% url 'report_detail' report.id %}" class="btn btn-outline-primary btn-sm" role="button">{{ report.id }}</a></td>
+                                                {% if not report.public_description and not report.public_files %}
+                                                    <td>{{ report.id }}</td>
+                                                {% else %}
+                                                    <td><a href="{% url 'report_detail' report.id %}" class="btn btn-outline-primary btn-sm" role="button">{{ report.id }}</a></td>
+                                                {% endif %}
                                                 <td>{{ report.report_location }}</td>
                                                 <td>
                                                     <button class="btn
-                                                {% if report.report_status == 'New' %}btn-primary
-                                                {% elif report.report_status == 'In Progress' %}btn-warning
-                                                {% elif report.report_status == 'Complete' %}btn-success
-                                                {% endif %}
-                                            " disabled>{{ report.report_status }}</button>
+                                                        {% if report.report_status == 'New' %}btn-primary
+                                                        {% elif report.report_status == 'In Progress' %}btn-warning
+                                                        {% elif report.report_status == 'Complete' %}btn-success
+                                                        {% endif %}
+                                                    " disabled>{{ report.report_status }}
+                                                    </button>
                                                 </td>
                                                 <td>
-                                                    {{ report.upvotes }}
-                                                </td>
-                                                <td class="centered">
-                                                    <a href="#" class="btn delete-btn" data-report-id="{{ report.id }}" title="Delete Report">
-                                                        <i class="fas fa-times text-danger"></i>
+                                                    <a href="#" class="upvote-btn" data-report-id="{{ report.id }}">
+                                                        {% if request.user in report.upvoters.all %}
+                                                            <i class="fas fa-thumbs-up text-primary" aria-hidden="true"></i>
+                                                        {% else %}
+                                                            <i class="fas fa-thumbs-up text-muted" aria-hidden="true"></i>
+                                                        {% endif %}
+                                                        <span id="upvote-count-{{ report.id }}">{{ report.upvotes }}</span>
                                                     </a>
                                                 </td>
                                             </tr>
-                                        {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Card for Other Reports -->
-                    <div class="col-md-10">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title">Other Reports</h4>
-                                <small class="subtext"> Click the ID button to view more details</small>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <thead>
-                                        <tr class="centered">
-                                            <th>Title</th>
-                                            <th>ID</th>
-                                            <th>Location</th>
-                                            <th>Status</th>
-                                            <th>Upvote?</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {% for report in all_reports %}
-                                            {% if report not in user_reports and report.is_public%}
-                                                <tr class="centered">
-                                                    <td class="title-column" onclick="toggleExpansion(this)">
-                                                        {{ report.report_title }}
-                                                        <i class="fas fa-chevron-down"></i>
-                                                    </td>
-                                                    {% if not report.public_description and not report.public_files %}
-                                                        <td>{{ report.id }}</td>
-                                                    {% else %}
-                                                        <td><a href="{% url 'report_detail' report.id %}" class="btn btn-outline-primary btn-sm" role="button">{{ report.id }}</a></td>
-                                                    {% endif %}
-                                                    <td>{{ report.report_location }}</td>
-                                                    <td>
-                                                        <button class="btn
-                                                            {% if report.report_status == 'New' %}btn-primary
-                                                            {% elif report.report_status == 'In Progress' %}btn-warning
-                                                            {% elif report.report_status == 'Complete' %}btn-success
-                                                            {% endif %}
-                                                        " disabled>{{ report.report_status }}
-                                                        </button>
-                                                    </td>
-                                                    <td>
-                                                        <a href="#" class="upvote-btn" data-report-id="{{ report.id }}">
-                                                            {% if request.user in report.upvoters.all %}
-                                                                <i class="fas fa-thumbs-up text-primary" aria-hidden="true"></i>
-                                                            {% else %}
-                                                                <i class="fas fa-thumbs-up text-muted" aria-hidden="true"></i>
-                                                            {% endif %}
-                                                            <span id="upvote-count-{{ report.id }}">{{ report.upvotes }}</span>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                            {% endif %}
-                                        {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- Possible return home button also at the bottom -->
-    {#            <div class="col-md-8 mt-3">#}
-    {#                <a href="{% url 'home' %}" class="btn btn-secondary">Back to Home</a>#}
-    {#            </div>#}
-            {% endif %}
-        </div>
+            </div>
+            <!-- Possible return home button also at the bottom -->
+{#            <div class="col-md-8 mt-3">#}
+{#                <a href="{% url 'home' %}" class="btn btn-secondary">Back to Home</a>#}
+{#            </div>#}
+        {% endif %}
     </div>
 </div>
+{#</div>#}
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script>
     $(document).ready(function() {
