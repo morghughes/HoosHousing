@@ -164,7 +164,7 @@ def submit(request):
         files = request.FILES.getlist('files')
         total_size = sum(file.size for file in files)
 
-        if not context['comment'] or not context['location'] or not context['title']:
+        if not context['comment'] or not context['location'] or not context['title'] or not context['type']:
             messages.error(request, "Please ensure all fields not noted as 'Optional' are answered. You are not required to select any checkboxes.", extra_tags='form_error')
         elif not context['is_public'] and (context['public_description'] or context['public_files']):
             messages.error(request, "You cannot share your description and/or files if the overall privacy is still private.", extra_tags='form_error')

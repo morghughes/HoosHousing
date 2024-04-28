@@ -66,7 +66,7 @@ class Report(models.Model):
         (SAFETY, 'Safety'),
         (OTHER, 'Other')
     ]
-    report_type = models.CharField(max_length=20, choices=TYPE_CHOICES, null=True, blank=True)
+    report_type = models.CharField(max_length=20, choices=TYPE_CHOICES)
 
     is_public = models.BooleanField(default=False, verbose_name="Make report public")
     public_description = models.BooleanField(default=False, verbose_name="Public Description")
