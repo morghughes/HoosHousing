@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='report',
             name='report_type',
-            field=models.CharField(blank=True, choices=[('Noise', 'Noise'), ('Maintenance', 'Maintenance'), ('Sanitation', 'Sanitation'), ('Safety', 'Safety'), ('Other', 'Other')], max_length=20, null=True),
+            field=models.CharField(blank=True, choices=[('Noise', 'Noise'), ('Maintenance', 'Maintenance'), ('Safety', 'Safety'), ('Other', 'Other')], max_length=20, null=True),
         ),
     ]
