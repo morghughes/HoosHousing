@@ -35,6 +35,27 @@
         color: #6c757d;
         font-size: 0.9rem;
     }
+    .custom-file-input {
+        visibility: hidden;
+        width: 0;
+        height: 0;
+    }
+    .file-upload-wrapper {
+        cursor: pointer;
+        display: inline-block;
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        transition: all 0.3s;
+        align-items: center;
+    }
+    .file-upload-text {
+        margin-left: 10px;
+        color: grey;
+    }
+    .no-file {
+        color: red;
+    }
     h4{
       font-family: 'Playfair Display', serif;
       font-weight: 700;
@@ -114,8 +135,14 @@
                     </div>
                 {% endif %}
               <div class="form-group">
-                <label for="file">{% trans "Upload files (Optional):" %}</label>
-                <input type="file" class="form-control-file" id="file" name="files" accept=".pdf, .jpeg, .png, .jpg" multiple>
+                  <label for="file">{% trans "Upload files (Optional):" %}</label>
+                  <div class="custom-file-upload" style="margin-top: 5px;">
+                      <button type="button" class="btn btn-secondary" onclick="document.getElementById('hidden-file-input').click();">Choose files</button>
+                      <input type="file" id="hidden-file-input" name="files" style="display: none;" accept=".pdf, .jpeg, .png, .jpg" multiple onchange="updateFileText()">
+                      <span id="file-upload-text" style="color: red";>No file chosen</span>
+                  </div>
+{#                <label for="file">{% trans "Upload files (Optional):" %}</label>#}
+{#                <input type="file" class="form-control-file" id="file" name="files" accept=".pdf, .jpeg, .png, .jpg" multiple>#}
               </div>
                 {% if user.is_authenticated %}
                     <div class="form-group">
@@ -148,6 +175,19 @@
               $('#message-container').fadeOut('slow');
           }, 7000);
       });
+
+      function updateFileText() {
+        var input = document.getElementById('hidden-file-input');
+        var fileText = document.getElementById('file-upload-text');
+        if (input.files.length > 0) {
+            var fileNames = Array.from(input.files).map(file => file.name).join(', ');
+            fileText.textContent = input.files.length + " file(s) chosen"; // Show file names or number of files
+            fileText.style.color = 'gray';
+        } else {
+            fileText.textContent = 'No file chosen';
+            fileText.style.color = 'red';
+        }
+      }
   </script>
 {% endblock %}
 {#</html>#}
