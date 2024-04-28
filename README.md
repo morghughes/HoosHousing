@@ -12,7 +12,8 @@ cd project-b-26
 
 # Set up a virtual environment (optional, but recommended)
 python -m venv venv
-source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+source venv/bin/activate  # For _MacOS_
+venv\Scripts\activate  # For _Windows_
 
 # Install dependencies
 pip install -r requirements.txt
