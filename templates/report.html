@@ -2,7 +2,6 @@
 {% load i18n %}
 
 <!DOCTYPE html>
-{#<html>#}
 {% block head %}
   <meta charset="utf-8">
   <title>{% trans "Report Form" %}</title>
@@ -93,7 +92,8 @@
           <div class="card-body">
             <form action="{% url 'submit' %}" method="post" enctype="multipart/form-data">
               {% csrf_token %}
-                <input type="hidden" name="cancel_redirect" value="{{ request.META.HTTP_REFERER|default:request.build_absolute_uri }}">
+{#                <input type="hidden" name="cancel_redirect" value="{{ request.META.HTTP_REFERER|default:request.build_absolute_uri }}">#}
+                <input type="hidden" name="cancel_redirect" value="{{ request.POST.cancel_redirect|default:request.META.HTTP_REFERER|default:request.build_absolute_uri }}">
                 <div class="form-group">
                 <label for="location">{% trans "Where was this?" %}</label>
                 <select class="form-control" id="location" name="location">
@@ -141,8 +141,6 @@
                       <input type="file" id="hidden-file-input" name="files" style="display: none;" accept=".pdf, .jpeg, .png, .jpg" multiple onchange="updateFileText()">
                       <span id="file-upload-text" style="color: red";>No file chosen</span>
                   </div>
-{#                <label for="file">{% trans "Upload files (Optional):" %}</label>#}
-{#                <input type="file" class="form-control-file" id="file" name="files" accept=".pdf, .jpeg, .png, .jpg" multiple>#}
               </div>
                 {% if user.is_authenticated %}
                     <div class="form-group">
@@ -200,7 +198,6 @@
       };
   </script>
 {% endblock %}
-{#</html>#}
 
 
 
