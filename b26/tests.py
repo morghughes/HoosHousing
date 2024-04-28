@@ -51,3 +51,79 @@ class DeleteReportTests(BaseTestCase):
         self.client.login(username='admin', password='testpass')
         response = self.client.post(reverse('delete_report', args=[self.report.id]))
         self.assertEqual(response.status_code, 403)  # Admins should not be able to delete any reports
+
+
+class SubmitViewTests(BaseTestCase):
+    def setUp(self):
+        super().setUp()
+        self.user, self.profile = self.create_user_and_profile('user', 'testpass')
+
+    def test_submit_report_success(self):
+        self.client.login(username='user', password='testpass')
+        response = self.client.post(reverse('submit'), {
+            'location': 'lobby',
+            'type': 'noise',
+            'title': 'Loud noise at night',
+            'comment': 'It is very loud after 10 PM.',
+            'is_public': True
+        }, HTTP_REFERER='/wherever/')
+        self.assertEqual(response.status_code, 302)  # Expecting redirect to "submitted" page
+
+    def test_submit_report_failure(self):
+        self.client.login(username='user', password='testpass')
+        response = self.client.post(reverse('submit'), {
+            'location': '',
+            'type': 'noise',
+            'title': '',
+            'comment': 'Incomplete form submission.'
+        }, HTTP_REFERER='/wherever/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_submit_report_unauthenticated(self):
+        response = self.client.post(reverse('submit'), {
+            'location': 'lobby',
+            'type': 'noise',
+            'title': 'Unauthenticated report',
+            'comment': 'Should not be processed.'
+        }, HTTP_REFERER='/wherever/')
+        self.assertEqual(response.status_code, 302)  # Expecting redirect to login page
+
+
+class UpvoteReportTests(BaseTestCase):
+    def setUp(self):
+        super().setUp()
+        self.user, self.profile = self.create_user_and_profile('user', 'testpass')
+        self.report = Report.objects.create(report_title="Upvotable Report", report_user=self.profile, is_public=True)
+
+    def test_upvote_report_authenticated(self):
+        self.client.login(username='user', password='testpass')
+        response = self.client.post(reverse('upvote_report', args=[self.report.id]))
+        self.assertEqual(response.status_code, 200)
+        updated_report = Report.objects.get(id=self.report.id)
+        self.assertEqual(updated_report.upvotes, 1)
+
+    def test_upvote_report_unauthenticated(self):
+        response = self.client.post(reverse('upvote_report', args=[self.report.id]))
+        self.assertEqual(response.status_code, 302)  # Redirected to log in since user is not authenticated
+
+
+class UpdateResolutionTests(BaseTestCase):
+    def setUp(self):
+        super().setUp()
+        self.admin_user, self.admin_profile = self.create_user_and_profile('admin', 'testpass', True)
+        self.user, self.profile = self.create_user_and_profile('user', 'testpass', False)
+        self.report = Report.objects.create(report_title="Report to Update", report_user=self.profile)
+
+    def test_update_resolution_by_admin(self):
+        self.client.login(username='admin', password='testpass')
+        response = self.client.post(reverse('update_resolution', args=[self.report.id]), {
+            'report_response': 'Resolution updated.'
+        })
+        self.assertEqual(response.status_code, 302)  # Redirect after update
+
+    def test_update_resolution_by_non_admin(self):
+        self.client.login(username='user', password='testpass')
+        response = self.client.post(reverse('update_resolution', args=[self.report.id]), {
+            'report_response': 'Attempt to update resolution.'
+        })
+        self.assertEqual(response.status_code, 403)  # Forbidden
