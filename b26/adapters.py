@@ -4,6 +4,7 @@ from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from allauth.account.utils import perform_login
 from django.shortcuts import redirect
 
+
 class CustomAccountAdapter(DefaultAccountAdapter):
     def populate_username(self, request, user):
         if user.email:

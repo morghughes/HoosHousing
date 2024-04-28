@@ -15,8 +15,10 @@ from django.contrib import messages
 from django.contrib.messages import constants as message_constants
 import random
 
+
 def welcome_view(request):
     return render(request, 'welcome.html')
+
 
 class ReportView(generic.DetailView):
     model = Report
@@ -158,7 +160,7 @@ def submit(request):
 
         else:
             similar_reports = Report.objects.filter(
-               Q(report_type=context['type']) & Q(report_location=context['location']) & ~Q(report_status='Complete') & Q(is_public=True)
+                Q(report_type=context['type']) & Q(report_location=context['location']) & ~Q(report_status='Complete') & Q(is_public=True)
             )
             title_words = context['title'].split()
             if len(similar_reports) != 0:
@@ -170,7 +172,7 @@ def submit(request):
                             exceptions = ['and', 'the', 'of', 'my', 'a', 'to', 'have', 'i', 'in']
                             if not exceptions.__contains__(word.lower()):
                                 counter += 1
-                                if counter > len(title_words)/2 or counter > 4:
+                                if counter > len(title_words) / 2 or counter > 4:
                                     messages.error(request, f"There is already an active {context['type'].lower()} report in {context['location']} that is similar in title to yours.", extra_tags='form_error')
                                     return render(request, "report.html", context)
             if request.user.is_authenticated:
@@ -211,7 +213,6 @@ def upvote_report(request, report_id):
     else:
         report.upvotes += 1
         report.upvoters.add(request.user)
-
 
     report.save()
     return JsonResponse({'upvotes': report.upvotes, 'upvoted': request.user in report.upvoters.all()})

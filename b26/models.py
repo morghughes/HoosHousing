@@ -35,7 +35,7 @@ class Report(models.Model):
         ("Hereford College", "Hereford College"), ("International Residential College", "International Residential College"),
         ("Bonnycastle", "Bonnycastle"), ("Dabney", "Dabney"), ("Echols", "Echols"), ("Emmet", "Emmet"),
         ("Hancock", "Hancock"), ("Humphreys", "Humphreys"), ("Kent", "Kent"), ("Lefevre", "Lefevre"), ("Metcalf", "Metcalf"), ("Page", "Page"),
-        ("Bice", "Bice"), ("Bond", "Bond"),("Copeley", "Copeley"),("Faulkner", "Faulkner"),("Lambeth", "Lambeth"),(" French House", "French House"),
+        ("Bice", "Bice"), ("Bond", "Bond"), ("Copeley", "Copeley"), ("Faulkner", "Faulkner"), ("Lambeth", "Lambeth"), (" French House", "French House"),
         ("Spanish House", "Spanish House"), ("Shea House", "Shea House"),
     ]
     report_location = models.CharField(max_length=250, choices=LOCATION_POSSIBILITIES, default="Balz-Dobie")

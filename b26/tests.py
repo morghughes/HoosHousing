@@ -13,6 +13,7 @@ class BaseTestCase(TestCase):
             profile.save()
         return user, profile
 
+
 class ReportDetailViewTests(BaseTestCase):
     def setUp(self):
         self.user, self.profile = self.create_user_and_profile('user', 'testpass', True)
