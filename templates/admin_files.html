@@ -74,6 +74,7 @@
         }
         .table-size {
             width: 100%;
+            margin-bottom: 40px;
         }
         .full-page-background {
             {#width: 65%;#}
@@ -121,7 +122,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="container py-0">
+<div class="container">
     <div class="row justify-content-center">
         {% if user.userprofile.is_site_admin and user.is_authenticated %}
             <!-- Card for Site Admins Showing All Reports -->
@@ -270,7 +271,7 @@
                 </div>
 
                 <!-- Card for Other Reports -->
-                <div class="col-md-10">
+                <div class="col-md-10" style="margin-bottom: 40px">
                     <div class="card">
                         <div class="card-header">
                             <h4 class="card-title">Other Reports</h4>
