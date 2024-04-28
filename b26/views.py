@@ -2,19 +2,17 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.files.storage import default_storage
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseForbidden, HttpResponse, HttpResponseRedirect, Http404
 from .models import FileUpload, Report, UserProfile
 from django.db.models import Q
 from django.views import generic
 from django.utils import timezone
-from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import TemplateView
 from django.contrib.auth.views import LoginView
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.contrib.messages import constants as message_constants
-from django.http import Http404
 import random
 
 def welcome_view(request):
@@ -48,7 +46,7 @@ def upload_file(request):
 @login_required
 def update_resolution(request, report_id):
     if not (request.user.is_authenticated and request.user.userprofile.is_site_admin):
-        return redirect('some_error_page')
+        return HttpResponseForbidden('You do not have permission to perform this action.')
 
     report = get_object_or_404(Report, pk=report_id)
     if request.method == "POST":
