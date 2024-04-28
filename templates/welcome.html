@@ -69,6 +69,22 @@
             background-color: #a71d2a;
             border-color: #9a1c28;
         }
+        .logout-button {
+            background: none;
+            color: red;
+            border: none;
+            padding: 0;
+            text-decoration: none;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: inherit;
+            margin-left: 5px;
+        }
+
+        .logout-button:hover, .logout-button:focus {
+            text-decoration: underline;
+            color: #f04b5b; /* Adjust color for hover state */
+        }
         article {
             background: white;
             padding: 20px;
@@ -101,9 +117,15 @@
                 <a href="{% url 'report' %}" class="btn btn-main">{% trans "Create Anonymous Report" %}</a>
             </div>
         {% else %}
-            <p class="welcome-text">Welcome, {% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %}!
-                <a href="{% url 'logout' %}" style="margin-left: 10px;">Sign Out</a>
-            </p>
+            <div style="display: inline-block;">
+                <p class="welcome-text" style="display: inline;">Welcome, {% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %}!</p>
+                <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-button">
+                        Sign Out
+                    </button>
+                </form>
+            </div>
             {% if user.userprofile.is_site_admin %}
                 <p class="welcome-text">*Site Admin*</p>
             {% endif %}
