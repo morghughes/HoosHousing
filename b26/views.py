@@ -240,6 +240,8 @@ def upvote_report(request, report_id):
 def delete_report(request, report_id):
     if request.method == 'POST':
         report = get_object_or_404(Report, id=report_id, report_user=request.user.userprofile)
+        # report = get_object_or_404(Report, id=report_id)  # Only for site admins to delete reports for cleanup,
+        # # not for production
         try:
             report.delete()
             return JsonResponse({'deleted': True})
