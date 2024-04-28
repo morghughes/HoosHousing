@@ -23,3 +23,5 @@ python manage.py migrate
 
 # Start the server (from main project directory)
 python manage.py runserver
+
+Please note that the "python" command depends on the version of Python you have installed on your local machine.
