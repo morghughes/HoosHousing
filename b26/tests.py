@@ -127,3 +127,44 @@ class UpdateResolutionTests(BaseTestCase):
             'report_response': 'Attempt to update resolution.'
         })
         self.assertEqual(response.status_code, 403)  # Forbidden
+
+
+class UserProfileTests(BaseTestCase):
+    def test_user_profile_creation(self):
+        user, profile = self.create_user_and_profile('testuser', 'password123', is_site_admin=True)
+        self.assertTrue(isinstance(profile, UserProfile))
+        self.assertEqual(profile.user.username, 'testuser')
+        self.assertTrue(profile.is_site_admin)
+
+    def test_user_profile_default_admin_status(self):
+        user, profile = self.create_user_and_profile('newuser', 'password123')
+        self.assertFalse(profile.is_site_admin)
+
+
+class ReportTests(BaseTestCase):
+    def setUp(self):
+        super().setUp()
+        self.user, self.profile = self.create_user_and_profile('reportuser', 'password')
+
+    def test_report_creation(self):
+        report = Report.objects.create(
+            report_title="Noise Complaint",
+            report_comment="There is a lot of noise every night after 10 PM.",
+            report_location="Balz-Dobie",
+            report_type=Report.NOISE,
+            report_user=self.profile
+        )
+        self.assertTrue(isinstance(report, Report))
+        self.assertEqual(report.report_user.user.username, 'reportuser')
+        self.assertEqual(report.report_status, Report.NEW)
+        self.assertFalse(report.is_public)
+
+    def test_report_string_representation(self):
+        report = Report.objects.create(
+            report_title="Maintenance Needed",
+            report_comment="Elevator is broken.",
+            report_location="Gibbons",
+            report_type=Report.MAINTENANCE,
+            report_user=self.profile
+        )
+        self.assertEqual(str(report), "Maintenance Needed")
