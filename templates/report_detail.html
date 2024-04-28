@@ -29,6 +29,7 @@
         font-weight: 550;
         color: #232D4B;
         }
+        .text-muted { color: gray; }
     </style>
 {#</head>#}
 {% endblock %}
@@ -93,6 +94,7 @@
                     </p>
                     <p><strong>Title:</strong> {{ report.report_title }}</p>
                     <p><strong>Location:</strong> {{ report.report_location }}</p>
+                    <p><strong>Type:</strong> {{ report.report_type }}</p>
                     <!-- Shows only if public description option was checked -->
                     {% if report.public_description or report.report_user == user.userprofile or user.userprofile.is_site_admin %}
                         <p><strong>Description:</strong> {{ report.report_comment }}</p>
@@ -100,9 +102,13 @@
                     <!-- Shows only if public files option was checked -->
                     {% if report.public_files or report.report_user == user.userprofile or user.userprofile.is_site_admin %}
                         <p><strong>Uploaded Files:</strong></p>
-                        {% for file_upload in report.uploads.all %}
-                            <a href="{{ file_upload.data.url }}" target="_blank">{{ file_upload.data.name }}</a><br>
-                        {% endfor %}
+                        {% if report.uploads.all %}
+                            {% for file_upload in report.uploads.all %}
+                                <a href="{{ file_upload.data.url }}" target="_blank">{{ file_upload.data.name }}</a><br>
+                            {% endfor %}
+                        {% else %}
+                            <p class="text-muted">No file uploads</p>
+                        {% endif %}
                     {% endif %}
                     <!-- Shows resolution details only to the uploader, and only if report is complete -->
                     {% if report.report_status == 'Complete' and user.is_authenticated and report.report_user == user.userprofile%}
@@ -116,7 +122,7 @@
                                 {% csrf_token %}
                                 <div class="form-group">
                                     <label for="reportResponse">Resolution Details:</label>
-                                    <textarea class="form-control" id="reportResponse" name="report_response" rows="3">{{ report.report_response }}</textarea>
+                                    <textarea class="form-control" id="reportResponse" name="report_response" rows="3" maxlength="500">{{ report.report_response }}</textarea>
                                 </div>
                                 <button type="submit" class="btn btn-info">Update Resolution</button>
                             </form>

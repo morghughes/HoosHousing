@@ -35,6 +35,27 @@
         color: #6c757d;
         font-size: 0.9rem;
     }
+    .custom-file-input {
+        visibility: hidden;
+        width: 0;
+        height: 0;
+    }
+    .file-upload-wrapper {
+        cursor: pointer;
+        display: inline-block;
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        transition: all 0.3s;
+        align-items: center;
+    }
+    .file-upload-text {
+        margin-left: 10px;
+        color: grey;
+    }
+    .no-file {
+        color: red;
+    }
     h4{
       font-family: 'Playfair Display', serif;
       font-weight: 700;
@@ -49,7 +70,7 @@
 {% endblock %}
 
 {% block content %}
-  <div class="container">
+  <div class="container" style="margin-bottom: 40px">
     <div class="row">
       <div class="col-md-8 offset-md-2">
           {% if messages %}
@@ -72,6 +93,7 @@
           <div class="card-body">
             <form action="{% url 'submit' %}" method="post" enctype="multipart/form-data">
               {% csrf_token %}
+                <input type="hidden" name="cancel_redirect" value="{{ request.META.HTTP_REFERER|default:request.build_absolute_uri }}">
                 <div class="form-group">
                 <label for="location">{% trans "Where was this?" %}</label>
                 <select class="form-control" id="location" name="location">
@@ -113,8 +135,14 @@
                     </div>
                 {% endif %}
               <div class="form-group">
-                <label for="file">{% trans "Upload files (Optional):" %}</label>
-                <input type="file" class="form-control-file" id="file" name="files" accept=".pdf, .jpeg, .png, .jpg" multiple>
+                  <label for="file">{% trans "Upload files (Optional):" %}</label>
+                  <div class="custom-file-upload" style="margin-top: 5px;">
+                      <button type="button" class="btn btn-secondary" onclick="document.getElementById('hidden-file-input').click();">Choose files</button>
+                      <input type="file" id="hidden-file-input" name="files" style="display: none;" accept=".pdf, .jpeg, .png, .jpg" multiple onchange="updateFileText()">
+                      <span id="file-upload-text" style="color: red";>No file chosen</span>
+                  </div>
+{#                <label for="file">{% trans "Upload files (Optional):" %}</label>#}
+{#                <input type="file" class="form-control-file" id="file" name="files" accept=".pdf, .jpeg, .png, .jpg" multiple>#}
               </div>
                 {% if user.is_authenticated %}
                     <div class="form-group">
@@ -127,7 +155,7 @@
                         <button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
                     </div>
                     <div class="col-sm-6 text-right">
-                        <a href="{% url 'welcome' %}" class="btn btn-danger" role="button">Cancel</a>
+                        <button type="submit" name="action" value="cancel" class="btn btn-danger">{% trans "Cancel" %}</button>
                     </div>
                 </div>
             </form>
@@ -147,6 +175,29 @@
               $('#message-container').fadeOut('slow');
           }, 7000);
       });
+
+      function updateFileText() {
+        var input = document.getElementById('hidden-file-input');
+        var fileText = document.getElementById('file-upload-text');
+        if (input.files.length > 0) {
+            var fileNames = Array.from(input.files).map(file => file.name).join(', ');
+            fileText.textContent = input.files.length + " file(s) chosen"; // Show file names or number of files
+            fileText.style.color = 'gray';
+        } else {
+            fileText.textContent = 'No file chosen';
+            fileText.style.color = 'red';
+        }
+      }
+
+      if (!localStorage.getItem('referrer')) {
+        localStorage.setItem('referrer', document.referrer || window.location.href);
+      }
+
+      document.getElementById('cancel_redirect').value = localStorage.getItem('referrer');
+
+      window.onbeforeunload = function() {
+          localStorage.removeItem('referrer');
+      };
   </script>
 {% endblock %}
 {#</html>#}

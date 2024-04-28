@@ -3,8 +3,6 @@
 {% load static %}
 
 <!DOCTYPE html>
-{#<html lang="en">#}
-{#<head>#}
 {% block head %}
     <meta charset="utf-8">
     <title>{% trans "Welcome to the UVA Housing Whistleblower Application" %}</title>
@@ -37,7 +35,7 @@
         header h1 {
             font-family: 'Playfair Display', serif;
             font-weight: 700;
-            font-size: 2.5rem;
+            font-size: 3.5rem;
         }
         header p {
             font-size: 1.2rem;
@@ -74,82 +72,65 @@
             border-radius: 0.3rem;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             margin-top: 30px;
+            margin-bottom: 40px;
         }
         article h2 {
             font-family: 'Playfair Display', serif;
             color: var(--button-bg-color);
             margin-bottom: 1rem;
         }
-        {#footer {#}
-        {#    text-align: center;#}
-        {#    padding: 15px;#}
-        {#    margin-top: 40px;#}
-        {#    color: var(--main-text-color);#}
-        {#    background: #e9ecef;#}
-        {#    border-radius: 0.2rem;#}
-        {#}#}
-        {#footer:hover {#}
-        {#    background-color: #cbd3da;#}
-        {#}#}
     </style>
-{#</head>#}
 {% endblock %}
 
 {% block content %}
-{#<body>#}
-    <div class="container">
-        <header class="text-center">
-            <h1>{% trans "Welcome to the UVA Housing Whistleblower Application" %}</h1>
-            <p class="lead">A dedicated platform for reporting issues related to UVA housing</p>
-            {% if not user.is_authenticated %}
-                <p class="welcome-text">You are not signed in.</p>
-                <div>
-                    <a href="{% url 'account_login' %}" class="btn btn-main">{% trans "Sign In" %}</a>
-                    <a href="{% url 'account_signup' %}" class="btn btn-main">{% trans "Sign Up" %}</a>
-                </div>
-                <p class="welcome-text">OR</p>
-                <div>
-                    <a href="{% url 'report' %}" class="btn btn-main">{% trans "Create Anonymous Report" %}</a>
-                </div>
-            {% else %}
-                <p class="welcome-text">Welcome, {% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %}!</p>
-                {% if user.userprofile.is_site_admin %}
-                    <p class="welcome-text">*Site Admin*</p>
-                {% endif %}
-                <div>
-                    {% if not user.userprofile.is_site_admin %}
-                        <a href="{% url 'report' %}" class="btn btn-main">Create Report</a>
-                        <a href="{% url 'view_reports' %}" class="btn btn-main">View Reports</a>
-                    {% else %}
-                        <a href="{% url 'view_reports' %}" class="btn btn-main">Manage Reports</a>
-                    {% endif %}
-
-                </div>
-                <div>
-                    <form action="{% url 'logout' %}" method="post" class="mb-3">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-danger">Logout</button>
-                    </form>
-                </div>
+<div class="container">
+    <header class="text-center">
+        <h1>{% trans "Welcome to the UVA Housing Whistleblower Application" %}</h1>
+        <p class="lead">A dedicated platform for reporting issues related to UVA housing</p>
+        {% if not user.is_authenticated %}
+            <p class="welcome-text">You are not signed in.</p>
+            <div>
+                <a href="{% url 'account_login' %}" class="btn btn-main">{% trans "Sign In" %}</a>
+                <a href="{% url 'account_signup' %}" class="btn btn-main">{% trans "Sign Up" %}</a>
+            </div>
+            <p class="welcome-text">OR</p>
+            <div>
+                <a href="{% url 'report' %}" class="btn btn-main">{% trans "Create Anonymous Report" %}</a>
+            </div>
+        {% else %}
+            <p class="welcome-text">Welcome, {% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %}!</p>
+            {% if user.userprofile.is_site_admin %}
+                <p class="welcome-text">*Site Admin*</p>
             {% endif %}
-        </header>
-        <article>
-            <h2>{% trans "Complaint Categories" %}</h2>
-            <ul>
-                <li><strong>{% trans "Noise" %}</strong> - {% trans "Report issues with noise or disruptions." %}</li>
-                <li><strong>{% trans "Sanitation" %}</strong> - {% trans "Issues related to cleanliness and sanitation problems." %}</li>
-                <li><strong>{% trans "Maintenance" %}</strong> - {% trans "Issues within UVA housing facilities that require UVA staff services." %}</li>
-                <li><strong>{% trans "Other" %}</strong> - {% trans "Any other types of issues not specifically categorized." %}</li>
-            </ul>
-        </article>
-        <article>
-            <h2>{% trans "Purpose of This Application" %}</h2>
-            <p>{% trans "This application is designed to provide UVA students a way to submit complaints and issues they encounter within UVA on-grounds housing. " %}</p>
-        </article>
-{#        <footer>#}
-{#            <p>{% trans "This application is for a UVA class. Please don't enter confidential information." %}</p>#}
-{#        </footer>#}
-    </div>
-{#</body>#}
-{#</html>#}
+            <div>
+                {% if not user.userprofile.is_site_admin %}
+                    <a href="{% url 'report' %}" class="btn btn-main">Create Report</a>
+                    <a href="{% url 'view_reports' %}" class="btn btn-main">View Reports</a>
+                {% else %}
+                    <a href="{% url 'view_reports' %}" class="btn btn-main">Manage Reports</a>
+                {% endif %}
+
+            </div>
+            <div>
+                <form action="{% url 'logout' %}" method="post" class="mb-3">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Logout</button>
+                </form>
+            </div>
+        {% endif %}
+    </header>
+    <article>
+        <h2>{% trans "Complaint Categories" %}</h2>
+        <ul>
+            <li><strong>{% trans "Noise" %}</strong> - {% trans "Report issues with noise or disruptions." %}</li>
+            <li><strong>{% trans "Sanitation" %}</strong> - {% trans "Issues related to cleanliness and sanitation problems." %}</li>
+            <li><strong>{% trans "Maintenance" %}</strong> - {% trans "Issues within UVA housing facilities that require UVA staff services." %}</li>
+            <li><strong>{% trans "Other" %}</strong> - {% trans "Any other types of issues not specifically categorized." %}</li>
+        </ul>
+    </article>
+    <article>
+        <h2>{% trans "Purpose of This Application" %}</h2>
+        <p>{% trans "This application is designed to provide UVA students a way to submit complaints and issues they encounter within UVA on-grounds housing. " %}</p>
+    </article>
+</div>
 {% endblock %}
