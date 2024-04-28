@@ -2,7 +2,6 @@ from allauth.account.adapter import DefaultAccountAdapter
 from django.utils.text import slugify
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from allauth.account.utils import perform_login
-from django.shortcuts import redirect
 
 
 class CustomAccountAdapter(DefaultAccountAdapter):
