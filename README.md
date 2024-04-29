@@ -37,3 +37,20 @@ python manage.py runserver
 - https://docs.djangoproject.com/en/stable/howto/deployment/checklist/
 - https://testdriven.io/blog/django-ci-github-actions/
 - https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
+- https://developer.mozilla.org/en-US/docs/Learn/CSS/Styling_text/Fundamentals
+- https://cssgradient.io/
+- https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Introduction
+- https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Home_page
+- https://developers.google.com/identity/branding-guidelines
+- https://docs.djangoproject.com/en/3.2/topics/auth/customizing/
+- https://docs.github.com/en/actions/learn-github-actions/environment-variables
+- https://docs.djangoproject.com/en/3.2/topics/testing/tools/
+- https://docs.github.com/en/actions/reference/encrypted-secrets
+- https://help.github.com/en/github/automating-your-workflow-with-github-actions/configuring-a-workflow
+- https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
+- https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
+- https://www.djangoproject.com/weblog/2020/feb/03/security-releases/
+- https://simpleisbetterthancomplex.com/tutorial/2016/07/26/how-to-reset-migrations.html
+- https://testdriven.io/blog/django-custom-user-model/
+- https://docs.github.com/en/actions/managing-workflow-runs/re-running-workflows-and-jobs
+
