@@ -47,6 +47,6 @@ jobs:
     - name: Run tests
       env:
         DATABASE_URL: postgres://khrxkvifsfrged:dc481d44ac2945667e21c81095b5b8649ce4f2e2254acd704fa8981e1a62fdc8@ec2-3-234-126-10.compute-1.amazonaws.com:5432/d3ksble7vsksl3
-        SECRET_KEY: ${{ secrets.B26_SECRET_KEY }}
+        B26_SECRET_KEY: ${{ secrets.B26_SECRET_KEY }}
       run: |
         python manage.py test
