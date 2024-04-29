@@ -38,9 +38,11 @@ jobs:
         pip install -r requirements.txt
 
     - name: Check SECRET_KEY length
-      run: echo "Secret key length: ${#SECRET_KEY}"
+      run: |
+        echo "Secret key length: ${#SECRET_KEY}"
       env:
         SECRET_KEY: ${{ secrets.B26_SECRET_KEY }}
+
 
     - name: Run tests
       env:
