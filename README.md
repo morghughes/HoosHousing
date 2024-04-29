@@ -24,4 +24,16 @@ python manage.py migrate
 # Start the server (from main project directory)
 python manage.py runserver
 
-Please note that the "python" command depends on the version of Python you have installed on your local machine.
+# Please note that the "python" command depends on the version of Python you have installed on your local machine.
+```
+## Sources
+https://docs.djangoproject.com/en/stable/topics/testing/
+https://docs.djangoproject.com/en/stable/topics/settings/
+https://docs.github.com/en/actions
+https://docs.github.com/en/actions/security-guides/encrypted-secrets
+https://docs.djangoproject.com/en/stable/ref/databases/
+https://www.postgresql.org/about/advantages/
+https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-SECRET_KEY
+https://docs.djangoproject.com/en/stable/howto/deployment/checklist/
+https://testdriven.io/blog/django-ci-github-actions/
+https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
