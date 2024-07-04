@@ -1,5 +1,4 @@
 # HoosHousing
-[NOTE] This is a academic project for the University of Virginia's CS 3240 course.
 
 ## Description
 HoosHousing is a web application designed to provide a platform for University of Virginia students to submit reports and complaints about occurings in UVA's on-campus housing. It offers an intuitive interface for users to create reports and provide incident details. Additionally, whistleblowers can receive status updates and comments regarding their report's resolution. They can also interact with reports from others, if they have been made public, and upvote reports they deem important or urgent.
